@@ -13,11 +13,11 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="152dp"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:layout_above="@+id/password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="23dp" />
 
     <EditText
         android:id="@+id/password"
@@ -27,4 +27,13 @@
         android:layout_centerVertical="true"
         android:ems="10"
         android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/signInButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Sign In"
+        android:layout_below="@+id/password"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
