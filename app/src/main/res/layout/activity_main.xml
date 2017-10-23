@@ -9,31 +9,4 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.access.accessonandroid.MainActivity">
 
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_above="@+id/password"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="23dp" />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/username"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:inputType="textPassword" />
-
-    <Button
-        android:id="@+id/signInButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="Sign In"
-        android:layout_below="@+id/password"
-        android:layout_centerHorizontal="true" />
 </RelativeLayout>
