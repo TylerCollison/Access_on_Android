@@ -46,6 +46,8 @@ import com.amazonaws.services.rekognition.model.CompareFacesResult;
 import com.amazonaws.services.rekognition.model.ComparedFace;
 import com.amazonaws.services.rekognition.model.BoundingBox;
 
+import android.content.Intent;
+
 /* End of Compare Face Staff */
 /* End of Mike's Imports*/
 
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startActivity(new Intent(MainActivity.this, Registration.class));
 
 
         // ----------- Mike's Code ----------------
