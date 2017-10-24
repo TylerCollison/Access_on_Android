@@ -1,11 +1,15 @@
-package com.access.accessonandroid;
+package com.access.accessonandroid.FacialRecog;
 
 /**
  * Created by suzey on 10/21/2017.
  */
 
 //
+import android.content.Context;
+
 import android.util.Log;
+import java.util.ArrayList;
+
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.services.rekognition.AmazonRekognition;
@@ -45,28 +49,200 @@ import com.amazonaws.services.rekognition.model.CompareFacesResult;
 import com.amazonaws.services.rekognition.model.ComparedFace;
 import com.amazonaws.services.rekognition.model.BoundingBox;
 
+/* Theads staff */
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public class Mike_Test {
-    //Log.d("Testing", "Testing"//);
-//    android.util.Log("Testing");
-    public static void mike_test() {
+public class FacialRegSu implements FacialRecog{
+    private Float SIMILARITY_THRESHOLD;
+    private Context applicationContext;
+    private CognitoCachingCredentialsProvider generalAwsCredential;
 
-        System.out.println("sdf");
+
+    /**
+     * Constructor
+     * @param androidAppContext
+     * @param awsCredential
+     */
+    public FacialRegSu(Context androidAppContext, CognitoCachingCredentialsProvider awsCredential) {
+        this.SIMILARITY_THRESHOLD = 70F;
+        this.applicationContext = androidAppContext;
+        this.generalAwsCredential = awsCredential;
+    }
+//
+//    private class MyCallable implements Callable<Boolean> {
+//        @Override
+//        public Boolean call() throws Exception {
+//            boolean result = false;
+//            try {
+//                result = compareFacesHelper(imageA, imageB);
+//            } catch(Exception e) {
+//                System.out.println("Something went wrong..");
+//            }
+//            return result;
+//        }
+//    }
+//
+
+
+
+    public boolean compareFaces(final Image imageA, final Image imageB) {
+        boolean isMatch = false;
+
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        List<Future<Boolean>> list = new ArrayList<Future<Boolean>>();
+        Callable<Boolean> callable = new Callable() {
+            @Override
+            public Boolean call() throws Exception {
+                boolean result = false;
+                try {
+                    result = compareFacesHelper(imageA, imageB);
+                } catch(Exception e) {
+                    System.out.println("Something went wrong..");
+                }
+                return result;
+            }
+        };
+
+        Future<Boolean> future = executor.submit(callable);
+
+        try {
+            //print the return value of Future, notice the output delay in console
+            // because Future.get() waits for task to get completed
+            isMatch = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        executor.shutdown();
+        return isMatch;
+
+
+//
+//        boolean result = false;
+//        new Thread(new Runnable(){
+//            @Override
+//            public void run() {
+//                try {
+//                    compareFacesHelper(imageA, imageB);
+//                } catch(Exception e) {
+//                    System.out.println("Something went wrong..");
+//                }
+//            }
+//        }).start();
+//
+//
+//        ExecutorService pool = Executors.newFixedThreadPool(3);
+//        Set<Future<Integer>> set = new HashSet<Future<Integer>>();
+//        Callable<Integer> callable = new WordLengthCallable(word);
+//        Future<Integer> future = pool.submit(callable);
+//        set.add(future);
+//        for (Future<Integer> future : set) {
+//            result = future.get();
+//        }
+//
+//        return result;
     }
 
-    public boolean mikes_test(android.content.Context applicationContext) throws Exception {
+
+    /**
+     * Given two images, report whether they match with a SIMILARITY_THREASHOLD certainty.
+     * @param imageA
+     * @param imageB
+     * @return
+     */
+    private boolean compareFacesHelper(Image imageA, Image imageB) {
+        CognitoCachingCredentialsProvider credentialsProvider = this.generalAwsCredential;
+        AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
+
+        CompareFacesRequest request = new CompareFacesRequest()
+                .withSourceImage(imageA)
+                .withTargetImage(imageB)
+                .withSimilarityThreshold(this.SIMILARITY_THRESHOLD);
+
+        CompareFacesResult compareFacesResult=client.compareFaces(request);
+
+        // Display results
+        List <CompareFacesMatch> faceDetails = compareFacesResult.getFaceMatches();
+
+        // Check if there is a match. This is currently flawed
+        boolean isMatched = faceDetails.size() == 1;
+
+        return isMatched;
+    }
+
+
+
+    /**
+     * TODO Needs to be improved upon
+     * @param filePath
+     * @return
+     */
+    public static Image makeImageFromLocalFile(String filePath) {
+        ByteBuffer imageBytes=null;
+        try (InputStream inputStream = new FileInputStream(new File(filePath))) {
+            imageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
+        }
+        catch(Exception e)
+        {
+            System.out.println("Failed to load source image " + filePath);
+            System.exit(1);                                                         // #ToDo Probably shouldn't exit the program!
+        }
+
+        Image result=new Image()
+                .withBytes(imageBytes);
+        return result;
+    }
+
+
+
+    public static Image makeImageFromS3File (String fileName, String bucketName) {
+        Image result = new Image().withS3Object(new S3Object()         // WHY does this work!?
+                .withName(fileName)
+                .withBucket(bucketName));
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // -------------------------------------- YOU SHOULDN'T HAVE TO READ ANYTHING BELOW THIS LINE ------------------------
+    //    public static void mike_test() {
+//
+//        System.out.println("sdf");
+//    }
+
+
+
+
+    /**
+     * Only here for my sanity. You can safely ignore this method.
+     *
+     * @param applicationContext
+     * @return
+     * @throws Exception
+     */
+    private boolean mikes_test(android.content.Context applicationContext) throws Exception {
         String IDENTITY_POOL_ID = "intentionally scambled********";
         String photo = "my_face.jpg";
         String bucket = "infosecurity";
 
-//        AWSCredentials credentials;
-//        try {
-//            credentials = new ProfileCredentialsProvider("AdminUser").getCredentials();
-//        } catch(Exception e) {
-//            throw new AmazonClientException("Cannot load the credentials from the credential profiles file. "
-//                    + "Please make sure that your credentials file is at the correct "
-//                    + "location (/Users/userid/.aws/credentials), and is in a valid format.", e);
-//        }
 
         // Initialize the Amazon Cognito credentials provider
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
@@ -75,11 +251,6 @@ public class Mike_Test {
                 Regions.US_EAST_1 // Region
         );
 
-//        AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder
-//                .standard()
-//                .withRegion(Regions.US_WEST_2)
-//                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-//                .build();
 
         AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
 
@@ -108,7 +279,7 @@ public class Mike_Test {
 //        }
 
         /* Comapre Faces */
-        Float similarityThreshold = 70F;
+        Float similarityThreshold = this.SIMILARITY_THRESHOLD;
         String sourceImageName = "target.jpg";
         String targetImageName = "target_2.jpg";
         String sourceBucket = "infosecurity";
@@ -175,5 +346,7 @@ public class Mike_Test {
 
         return true;
     }
+
+
 
 }
