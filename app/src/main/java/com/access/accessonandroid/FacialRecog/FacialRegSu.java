@@ -120,18 +120,20 @@ public class FacialRegSu implements FacialRecog{
         return isMatch;
 
 
-//
-//        boolean result = false;
+        // ----------- Mike's Code ----------------
 //        new Thread(new Runnable(){
 //            @Override
 //            public void run() {
 //                try {
-//                    compareFacesHelper(imageA, imageB);
+//                    mikes_test();
 //                } catch(Exception e) {
 //                    System.out.println("Something went wrong..");
 //                }
 //            }
 //        }).start();
+        // -------------- End of Mike's Code ----------
+
+//
 //
 //
 //        ExecutorService pool = Executors.newFixedThreadPool(3);
