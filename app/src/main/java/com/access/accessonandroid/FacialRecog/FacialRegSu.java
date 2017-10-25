@@ -87,9 +87,35 @@ public class FacialRegSu implements FacialRecog{
 //    }
 //
 
+    /**
+     * Given two images, report whether they match with a SIMILARITY_THREASHOLD certainty.
+     * @param imageA
+     * @param imageB
+     * @return
+     */
+    public boolean compareFaces(Image imageA, Image imageB) {
+        CognitoCachingCredentialsProvider credentialsProvider = this.generalAwsCredential;
+        AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
+
+        CompareFacesRequest request = new CompareFacesRequest()
+                .withSourceImage(imageA)
+                .withTargetImage(imageB)
+                .withSimilarityThreshold(this.SIMILARITY_THRESHOLD);
+
+        CompareFacesResult compareFacesResult=client.compareFaces(request);
+
+        // Display results
+        List <CompareFacesMatch> faceDetails = compareFacesResult.getFaceMatches();
+
+        // Check if there is a match. This is currently flawed
+        boolean isMatched = faceDetails.size() == 1;
+
+        return isMatched;
+    }
 
 
-    public boolean compareFaces(final Image imageA, final Image imageB) {
+
+    public boolean compareFacesThreaded(final Image imageA, final Image imageB) {
         boolean isMatch = false;
 
         ExecutorService executor = Executors.newFixedThreadPool(1);
@@ -99,8 +125,8 @@ public class FacialRegSu implements FacialRecog{
             public Boolean call() throws Exception {
                 boolean result = false;
                 try {
-                    result = compareFacesHelper(imageA, imageB);
-                } catch(Exception e) {
+                    result = compareFaces(imageA, imageB);
+                } catch (Exception e) {
                     System.out.println("Something went wrong..");
                 }
                 return result;
@@ -146,33 +172,6 @@ public class FacialRegSu implements FacialRecog{
 //        }
 //
 //        return result;
-    }
-
-
-    /**
-     * Given two images, report whether they match with a SIMILARITY_THREASHOLD certainty.
-     * @param imageA
-     * @param imageB
-     * @return
-     */
-    private boolean compareFacesHelper(Image imageA, Image imageB) {
-        CognitoCachingCredentialsProvider credentialsProvider = this.generalAwsCredential;
-        AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
-
-        CompareFacesRequest request = new CompareFacesRequest()
-                .withSourceImage(imageA)
-                .withTargetImage(imageB)
-                .withSimilarityThreshold(this.SIMILARITY_THRESHOLD);
-
-        CompareFacesResult compareFacesResult=client.compareFaces(request);
-
-        // Display results
-        List <CompareFacesMatch> faceDetails = compareFacesResult.getFaceMatches();
-
-        // Check if there is a match. This is currently flawed
-        boolean isMatched = faceDetails.size() == 1;
-
-        return isMatched;
     }
 
 
