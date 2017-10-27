@@ -7,32 +7,25 @@ package com.access.accessonandroid.FacialRecog;
 //
 import android.content.Context;
 
-import android.util.Log;
-import java.util.ArrayList;
-
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClient;
 //import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.auth.AWSCredentials;
 //import com.amazonaws.auth.AWSStaticCredentialsProvider;
 //import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 //import com.amazonaws.services.rekognition.model.AmazonRekognitionException;
 import com.amazonaws.services.rekognition.model.DetectLabelsRequest;
-import com.amazonaws.services.rekognition.model.DetectLabelsResult;
 import com.amazonaws.services.rekognition.model.Image;
-import com.amazonaws.services.rekognition.model.Label;
 import com.amazonaws.services.rekognition.model.S3Object;
 import java.util.List;
 
 /* Detect Face Staff */
-//import com.amazonaws.services.rekognition.model.Attribute;
-//import com.amazonaws.services.rekognition.model.DetectFacesRequest;
-//import com.amazonaws.services.rekognition.model.DetectFacesResult;
-//import com.amazonaws.services.rekognition.model.FaceDetail;
+import com.amazonaws.services.rekognition.model.Attribute;
+import com.amazonaws.services.rekognition.model.DetectFacesRequest;
+import com.amazonaws.services.rekognition.model.DetectFacesResult;
+import com.amazonaws.services.rekognition.model.FaceDetail;
 //import com.amazonaws.services.rekognition.model.AgeRange;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 /* End of Detect Face Staff */
@@ -50,23 +43,13 @@ import com.amazonaws.services.rekognition.model.ComparedFace;
 import com.amazonaws.services.rekognition.model.BoundingBox;
 
 /* Theads staff */
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 public class FacialRegSu implements FacialRecog{
-    private Thread new_thread_1;
+    private Thread newThread;
 
     private Float SIMILARITY_THRESHOLD;
     private Context applicationContext;
     private CognitoCachingCredentialsProvider generalAwsCredential;
-
-//
-//    private boolean resultIsReady;
-//    private boolean isFaceMatch;
 
 
     /**
@@ -75,13 +58,13 @@ public class FacialRegSu implements FacialRecog{
 //     * @param awsCredential
      */
     public FacialRegSu(Context androidAppContext) {                                         // , CognitoCachingCredentialsProvider awsCredential
-        this.new_thread_1 = null;
+        this.newThread = null;
 
         this.SIMILARITY_THRESHOLD = 70F;
         this.applicationContext = androidAppContext;                                        //        this.generalAwsCredential = awsCredential;
         this.generalAwsCredential = new CognitoCachingCredentialsProvider(      // @TODO Should move this out eventually
                 this.applicationContext,
-                "*****scambled****", // Identity pool ID
+                "***scambled****", // Identity pool ID
                 Regions.US_EAST_1 // Region
         );
     }
@@ -101,22 +84,71 @@ public class FacialRegSu implements FacialRecog{
 //
 
     /**
+     * Mainly used as a helper function
+     * @param pic
+     * @return Number of faces detected
+     */
+    public int detectFaces(Image pic) {
+        int numOfFacesDetected = 0;         // Default is 0
+
+        CognitoCachingCredentialsProvider credentialsProvider = this.generalAwsCredential;
+        AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
+
+        DetectFacesRequest detectFaceRequest = new DetectFacesRequest()
+                .withImage(pic);
+        try {
+            DetectFacesResult result = client.detectFaces(detectFaceRequest);
+            List < FaceDetail > faceDetails = result.getFaceDetails();
+            numOfFacesDetected = faceDetails.size();
+
+//            for (FaceDetail face: faceDetails) {
+//                if (detectFaceRequest.getAttributes().contains("ALL")) {
+//                    AgeRange ageRange = face.getAgeRange();
+//                    System.out.println("The detected face is estimated to be between "
+//                            + ageRange.getLow().toString() + " and " + ageRange.getHigh().toString()
+//                            + " years old.");
+//                    System.out.println("Here's the complete set of attributes:");
+//                } else { // non-default attributes have null values.
+//                    System.out.println("Here's the default set of attributes:");
+//                }
+//
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(face));
+//            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return numOfFacesDetected;
+    }
+
+    /**
      * Given two images, report whether they match with a SIMILARITY_THREASHOLD certainty.
-     * @param imageA
-     * @param imageB
+     * @param imageOnFile
+     * @param target
      * @return
      */
-    public boolean compareFaces(Image imageA, Image imageB) {
+    public boolean compareFaces(Image imageOnFile, Image target) {
         // Initialize the Amazon Cognito credentials provider
-
+        boolean isMatched = false;
 
 
         CognitoCachingCredentialsProvider credentialsProvider = this.generalAwsCredential;
         AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
 
+        /* Detect how many faces are in the given picture */
+        int numOfFacesDetected = detectFaces(target);
+        System.out.println("Number of faces detected: " + numOfFacesDetected);
+        if (numOfFacesDetected != 1) {      // if the target image has 0 or more than 1 faces in it
+            return isMatched;               // return no match
+        }
+
+
         CompareFacesRequest request = new CompareFacesRequest()
-                .withSourceImage(imageA)
-                .withTargetImage(imageB)
+                .withSourceImage(imageOnFile)
+                .withTargetImage(target)
                 .withSimilarityThreshold(this.SIMILARITY_THRESHOLD);
 
         CompareFacesResult compareFacesResult=client.compareFaces(request);
@@ -124,8 +156,8 @@ public class FacialRegSu implements FacialRecog{
         // Display results
         List <CompareFacesMatch> faceDetails = compareFacesResult.getFaceMatches();
 
-        // Check if there is a match. This is currently flawed
-        boolean isMatched = faceDetails.size() == 1;
+        // Check if there is a match.
+        isMatched = faceDetails.size() == 1;
 
         System.out.println("Comparing Faces...");
         System.out.println("The result is: " + isMatched + " Hohoho!");
@@ -136,66 +168,23 @@ public class FacialRegSu implements FacialRecog{
 
 
 
-    public boolean compareFacesThreadedBlocking(final Image imageA, final Image imageB) {
+    public boolean compareFacesThreadedBlocking(final Image imageOnFile, final Image target) {
         boolean isMatch = false;            // default facial comparison result
-
-//        ExecutorService executor = Executors.newFixedThreadPool(1);
-//        List<Future<Boolean>> list = new ArrayList<Future<Boolean>>();
-
-//        Callable<Boolean> callable = new Callable() {
-//            @Override
-//            public Boolean call() throws Exception {
-//                boolean result = false;
-//                try {
-//                    result = compareFaces(imageA, imageB);
-//                } catch (Exception e) {
-//                    System.out.println("Something went wrong..");
-//                }
-//                return result;
-//            }
-//        };
-
-
-//        Future<Boolean> future = executor.submit(callable);
-
-//        try {
-//            //print the return value of Future, notice the output delay in console
-//            // because Future.get() waits for task to get completed
-//            isMatch = future.get();
-//        } catch (InterruptedException | ExecutionException e) {
-//            e.printStackTrace();
-//        }
-//        executor.shutdown();
-
-
-
-//        Runnable just_kidding = new FacialRecogRunnable(this.applicationContext, imageA, imageB);
 
         final boolean[] facialCompResult = new boolean[1];
         facialCompResult[0] = false;         //default facial comparison result
 
-//        Runnable just_kidding_2 = new Runnable() {
-////            boolean result_after_procedure = false;
-//
-//            @Override
-//            public void run() {
-//                facialCompResult[0] = compareFaces(imageA, imageB);
-//            }
-//
-//        };
+        Runnable codeToRunOnNewThread = new FacialRecogRunnable(this, imageOnFile, target, facialCompResult);
 
-        Runnable just_kidding_2 = new FacialRecogRunnable(this, imageA, imageB, facialCompResult);
-
-        if (this.new_thread_1 != null && this.new_thread_1.isAlive()) {          // A thread is already running. Ignore facial comparison request and return false
+        if (this.newThread != null && this.newThread.isAlive()) {          // A thread is already running. Ignore facial comparison request and return false
             return isMatch;
         }
-        this.new_thread_1 = new Thread(just_kidding_2);
-        this.new_thread_1.start();
+        this.newThread = new Thread(codeToRunOnNewThread);
+        this.newThread.start();
         try {
-            this.new_thread_1.join();
+            this.newThread.join();
             isMatch = facialCompResult[0];      // Once the thread is finished the result will be stored at facialCompResult[0]
-//            this.isFaceMatch = work_work_work[0];
-//            this.resultIsReady = true;
+
         }catch(InterruptedException e) {
             e.printStackTrace();
             System.out.println("Something wrong with the facial recognition threaded face comparison!");
@@ -203,47 +192,33 @@ public class FacialRegSu implements FacialRecog{
 
         return isMatch;
 
-
-        // ----------- Mike's Code ----------------
-//        new Thread(new Runnable(){
-//            @Override
-//            public void run() {
-//                try {
-//                    mikes_test();
-//                } catch(Exception e) {
-//                    System.out.println("Something went wrong..");
-//                }
-//            }
-//        }).start();
-        // -------------- End of Mike's Code ----------
-
-//
-//
-//
-//        ExecutorService pool = Executors.newFixedThreadPool(3);
-//        Set<Future<Integer>> set = new HashSet<Future<Integer>>();
-//        Callable<Integer> callable = new WordLengthCallable(word);
-//        Future<Integer> future = pool.submit(callable);
-//        set.add(future);
-//        for (Future<Integer> future : set) {
-//            result = future.get();
-//        }
-//
-//        return result;
     }
 
 
 
-//
-//
-//    public boolean compareFacesWithCallbackFunc(Image imageA, final Image imageB, FacialRecogCallbackFuncObj callbackFunc) {
-//        boolean comparisonInitiated = false;            // default facial comparison result
-//
-//        Runnable tmp = new FacialRecogRunnable(this.applicationContext, imageA, imageB);
-//
-//
-//
-//    }
+    public boolean compareFacesWithCallbackFunc(final Image imageOnFile, final Image target, final FacialRecogCallbackFuncObj callbackFunc) {
+        boolean comparisonInitiated = false;            // default facial comparison result
+
+        // THIS IS NOT PERFECT. IT DOES NOT ACCOUNT FOR RACE CONDITION. BUT FOR THE PURPOSE OF A DEMONSTRATION IT SHOULD SUFFICE
+        if (this.newThread != null && this.newThread.isAlive()) {          // A thread is already running. Ignore facial comparison request and return false
+            return comparisonInitiated;
+        }
+
+        Runnable codeToRunOnNewThread = new Runnable() {
+            @Override
+            public void run() {
+                boolean result = false;
+                result = compareFaces(imageOnFile, target);
+                callbackFunc.execute(result);           // invoke callback function
+            }
+        };
+
+        this.newThread = new Thread(codeToRunOnNewThread);
+        this.newThread.start();
+        comparisonInitiated = true;
+
+        return comparisonInitiated;
+    }
 
 
 
@@ -261,7 +236,7 @@ public class FacialRegSu implements FacialRecog{
         catch(Exception e)
         {
             System.out.println("Failed to load source image " + filePath);
-            System.exit(1);                                                         // #ToDo Probably shouldn't exit the program!
+//            System.exit(1);                                                         // #ToDo Probably shouldn't exit the program!
         }
 
         Image result=new Image()

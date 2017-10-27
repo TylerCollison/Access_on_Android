@@ -1,6 +1,5 @@
 package com.access.accessonandroid.FacialRecog;
 
-import com.access.accessonandroid.FacialRecog.FacialRegSu;
 import com.amazonaws.services.rekognition.model.Image;
 
 /**
@@ -11,20 +10,20 @@ public class FacialRecogRunnable implements Runnable {
     private boolean[] result;
     FacialRecog facialRecogObject;
 
-    private Image image_1;
-    private Image image_2;
+    private Image sourceImage;
+    private Image targetImage;
 //    private android.content.Context appContext;
 
-    FacialRecogRunnable(FacialRegSu currObject, Image img_1, Image img_2, boolean[] resultQuickFix)         //android.content.Context androidAppContext,
+    FacialRecogRunnable(FacialRecog currObject, Image imageOnFile, Image target, boolean[] resultQuickFix)         //android.content.Context androidAppContext,
     {
         this.result = resultQuickFix;
-        this.image_1 = img_1;
-        this.image_2 = img_2;
+        this.sourceImage = imageOnFile;
+        this.targetImage = target;
         this.facialRecogObject = currObject;
     }
 
     public void run() {
         boolean [] resultTmpArray = this.result;
-        resultTmpArray[0] = this.facialRecogObject.compareFaces(this.image_1, this.image_2);
+        resultTmpArray[0] = this.facialRecogObject.compareFaces(this.sourceImage, this.targetImage);
     }
 }

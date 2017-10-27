@@ -5,5 +5,9 @@ package com.access.accessonandroid.FacialRecog;
  */
 
 public abstract class FacialRecogCallbackFuncObj {
-    public abstract void execute(boolean FacialComparResult);
+    /**
+     * The function invoked when a facial comparison procedure is finished
+     * @param facialComparResult Weather the given faces matched each other or not
+     */
+    public abstract void execute(boolean facialComparResult);
 }
