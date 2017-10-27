@@ -1,0 +1,17 @@
+        //Testing Code by Mike
+//        FacialRegSu tst_su = new FacialRegSu(getApplicationContext());
+//        Image pict_1 = FacialRegSu.makeImageFromS3File("source.jpg", "infosecurity");
+//        Image pict_2 = FacialRegSu.makeImageFromS3File("my_face.jpg", "infosecurity");
+//        boolean result_tmp = tst_su.compareFacesThreaded(pict_1, pict_2);
+//        System.out.println(result_tmp + " Lalalala");
+//        System.out.println("The result is: ");
+////        System.out.println(tst_su.getThreadResult() + ": 1");
+////        try {
+////            TimeUnit.SECONDS.sleep(1);
+////        }catch(Exception e) {
+////            e.printStackTrace();
+////        }
+////        System.out.println(tst_su.getThreadResult() + ": 2");
+////        System.out.println(tst_su.getThreadResult() + ": 3");
+////        System.out.println(tst_su.getThreadResult() + ": 4");
+//        System.out.println("What?");

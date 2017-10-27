@@ -55,22 +55,31 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class FacialRegSu implements FacialRecog{
     private Float SIMILARITY_THRESHOLD;
     private Context applicationContext;
     private CognitoCachingCredentialsProvider generalAwsCredential;
 
+//
+//    private boolean resultIsReady;
+//    private boolean isFaceMatch;
+
 
     /**
      * Constructor
      * @param androidAppContext
-     * @param awsCredential
+//     * @param awsCredential
      */
-    public FacialRegSu(Context androidAppContext, CognitoCachingCredentialsProvider awsCredential) {
+    public FacialRegSu(Context androidAppContext) {                                         // , CognitoCachingCredentialsProvider awsCredential
         this.SIMILARITY_THRESHOLD = 70F;
-        this.applicationContext = androidAppContext;
-        this.generalAwsCredential = awsCredential;
+        this.applicationContext = androidAppContext;                                        //        this.generalAwsCredential = awsCredential;
+        this.generalAwsCredential = new CognitoCachingCredentialsProvider(      // @TODO Should move this out eventually
+                this.applicationContext,
+                "*****scambled****", // Identity pool ID
+                Regions.US_EAST_1 // Region
+        );
     }
 //
 //    private class MyCallable implements Callable<Boolean> {
@@ -94,6 +103,10 @@ public class FacialRegSu implements FacialRecog{
      * @return
      */
     public boolean compareFaces(Image imageA, Image imageB) {
+        // Initialize the Amazon Cognito credentials provider
+
+
+
         CognitoCachingCredentialsProvider credentialsProvider = this.generalAwsCredential;
         AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
 
@@ -110,39 +123,75 @@ public class FacialRegSu implements FacialRecog{
         // Check if there is a match. This is currently flawed
         boolean isMatched = faceDetails.size() == 1;
 
+        System.out.println("Comparing Faces...");
+        System.out.println("The result is: " + isMatched + " Hohoho!");
+
         return isMatched;
     }
+
 
 
 
     public boolean compareFacesThreaded(final Image imageA, final Image imageB) {
         boolean isMatch = false;
 
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-        List<Future<Boolean>> list = new ArrayList<Future<Boolean>>();
-        Callable<Boolean> callable = new Callable() {
+//        ExecutorService executor = Executors.newFixedThreadPool(1);
+//        List<Future<Boolean>> list = new ArrayList<Future<Boolean>>();
+
+//        Callable<Boolean> callable = new Callable() {
+//            @Override
+//            public Boolean call() throws Exception {
+//                boolean result = false;
+//                try {
+//                    result = compareFaces(imageA, imageB);
+//                } catch (Exception e) {
+//                    System.out.println("Something went wrong..");
+//                }
+//                return result;
+//            }
+//        };
+
+
+//        Future<Boolean> future = executor.submit(callable);
+
+//        try {
+//            //print the return value of Future, notice the output delay in console
+//            // because Future.get() waits for task to get completed
+//            isMatch = future.get();
+//        } catch (InterruptedException | ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//        executor.shutdown();
+
+
+
+//        Runnable just_kidding = new FacialRecogRunnable(this.applicationContext, imageA, imageB);
+
+        final boolean[] trickAndLieVariable = new boolean[1];
+        trickAndLieVariable[0] = false;
+
+        Runnable just_kidding_2 = new Runnable() {
+//            boolean result_after_procedure = false;
+
             @Override
-            public Boolean call() throws Exception {
-                boolean result = false;
-                try {
-                    result = compareFaces(imageA, imageB);
-                } catch (Exception e) {
-                    System.out.println("Something went wrong..");
-                }
-                return result;
+            public void run() {
+                trickAndLieVariable[0] = compareFaces(imageA, imageB);
             }
+
         };
 
-        Future<Boolean> future = executor.submit(callable);
-
+        Thread the_new_thread = new Thread(just_kidding_2);
+        the_new_thread.start();
         try {
-            //print the return value of Future, notice the output delay in console
-            // because Future.get() waits for task to get completed
-            isMatch = future.get();
-        } catch (InterruptedException | ExecutionException e) {
+            the_new_thread.join();
+            isMatch = trickAndLieVariable[0];
+//            this.isFaceMatch = work_work_work[0];
+//            this.resultIsReady = true;
+        }catch(InterruptedException e) {
             e.printStackTrace();
+            System.out.println("Something wrong with the facial recognition threaded face comparison!");
         }
-        executor.shutdown();
+
         return isMatch;
 
 
@@ -173,6 +222,14 @@ public class FacialRegSu implements FacialRecog{
 //
 //        return result;
     }
+
+
+//    public boolean getThreadResult() {
+//        boolean result = this.isFaceMatch;
+//        this.isFaceMatch = false;
+//        return result;
+//    }
+
 
 
 
