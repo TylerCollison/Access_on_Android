@@ -58,6 +58,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class FacialRegSu implements FacialRecog{
+    private Thread new_thread_1;
+
     private Float SIMILARITY_THRESHOLD;
     private Context applicationContext;
     private CognitoCachingCredentialsProvider generalAwsCredential;
@@ -73,6 +75,8 @@ public class FacialRegSu implements FacialRecog{
 //     * @param awsCredential
      */
     public FacialRegSu(Context androidAppContext) {                                         // , CognitoCachingCredentialsProvider awsCredential
+        this.new_thread_1 = null;
+
         this.SIMILARITY_THRESHOLD = 70F;
         this.applicationContext = androidAppContext;                                        //        this.generalAwsCredential = awsCredential;
         this.generalAwsCredential = new CognitoCachingCredentialsProvider(      // @TODO Should move this out eventually
@@ -132,8 +136,8 @@ public class FacialRegSu implements FacialRecog{
 
 
 
-    public boolean compareFacesThreaded(final Image imageA, final Image imageB) {
-        boolean isMatch = false;
+    public boolean compareFacesThreadedBlocking(final Image imageA, final Image imageB) {
+        boolean isMatch = false;            // default facial comparison result
 
 //        ExecutorService executor = Executors.newFixedThreadPool(1);
 //        List<Future<Boolean>> list = new ArrayList<Future<Boolean>>();
@@ -167,24 +171,29 @@ public class FacialRegSu implements FacialRecog{
 
 //        Runnable just_kidding = new FacialRecogRunnable(this.applicationContext, imageA, imageB);
 
-        final boolean[] trickAndLieVariable = new boolean[1];
-        trickAndLieVariable[0] = false;
+        final boolean[] facialCompResult = new boolean[1];
+        facialCompResult[0] = false;         //default facial comparison result
 
-        Runnable just_kidding_2 = new Runnable() {
-//            boolean result_after_procedure = false;
+//        Runnable just_kidding_2 = new Runnable() {
+////            boolean result_after_procedure = false;
+//
+//            @Override
+//            public void run() {
+//                facialCompResult[0] = compareFaces(imageA, imageB);
+//            }
+//
+//        };
 
-            @Override
-            public void run() {
-                trickAndLieVariable[0] = compareFaces(imageA, imageB);
-            }
+        Runnable just_kidding_2 = new FacialRecogRunnable(this, imageA, imageB, facialCompResult);
 
-        };
-
-        Thread the_new_thread = new Thread(just_kidding_2);
-        the_new_thread.start();
+        if (this.new_thread_1 != null && this.new_thread_1.isAlive()) {          // A thread is already running. Ignore facial comparison request and return false
+            return isMatch;
+        }
+        this.new_thread_1 = new Thread(just_kidding_2);
+        this.new_thread_1.start();
         try {
-            the_new_thread.join();
-            isMatch = trickAndLieVariable[0];
+            this.new_thread_1.join();
+            isMatch = facialCompResult[0];      // Once the thread is finished the result will be stored at facialCompResult[0]
 //            this.isFaceMatch = work_work_work[0];
 //            this.resultIsReady = true;
         }catch(InterruptedException e) {
@@ -224,10 +233,16 @@ public class FacialRegSu implements FacialRecog{
     }
 
 
-//    public boolean getThreadResult() {
-//        boolean result = this.isFaceMatch;
-//        this.isFaceMatch = false;
-//        return result;
+
+//
+//
+//    public boolean compareFacesWithCallbackFunc(Image imageA, final Image imageB, FacialRecogCallbackFuncObj callbackFunc) {
+//        boolean comparisonInitiated = false;            // default facial comparison result
+//
+//        Runnable tmp = new FacialRecogRunnable(this.applicationContext, imageA, imageB);
+//
+//
+//
 //    }
 
 

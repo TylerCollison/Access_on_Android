@@ -25,7 +25,7 @@ public interface FacialRecog {
      * @param imageB
      * @return
      */
-    public boolean compareFacesThreaded(final Image imageA, final Image imageB);
+    public boolean compareFacesThreadedBlocking(final Image imageA, final Image imageB);
 
 
     /**

@@ -8,20 +8,23 @@ import com.amazonaws.services.rekognition.model.Image;
  */
 
 public class FacialRecogRunnable implements Runnable {
-    public boolean result;
+    private boolean[] result;
+    FacialRecog facialRecogObject;
+
     private Image image_1;
     private Image image_2;
-    private android.content.Context appContext;
+//    private android.content.Context appContext;
 
-    FacialRecogRunnable(android.content.Context androidAppContext, Image img_1, Image img_2) {
-        this.result = false;
+    FacialRecogRunnable(FacialRegSu currObject, Image img_1, Image img_2, boolean[] resultQuickFix)         //android.content.Context androidAppContext,
+    {
+        this.result = resultQuickFix;
         this.image_1 = img_1;
         this.image_2 = img_2;
-        this.appContext = androidAppContext;
+        this.facialRecogObject = currObject;
     }
 
     public void run() {
-        FacialRecog tmp = new FacialRegSu(this.appContext);
-        this.result = tmp.compareFaces(this.image_1, this.image_2);
+        boolean [] resultTmpArray = this.result;
+        resultTmpArray[0] = this.facialRecogObject.compareFaces(this.image_1, this.image_2);
     }
 }
