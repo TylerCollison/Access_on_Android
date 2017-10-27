@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file defines which AIDs this application should emulate cards for.
+     Vendor-specific AIDs should always start with an "F", according to the ISO 7816 spec. We
+     recommended vendor-specific AIDs be at least 6 characters long, to provide sufficient
+     uniqueness. Note, however, that longer AIDs may impose a burden on non-Android NFC terminals.
+     AIDs may not exceed 32 characters (16 bytes).
+     Additionally, AIDs must always contain an even number of characters, in hexadecimal format.
+     In order to avoid prompting the user to select which service they want to use when the device
+     is scanned, this app must be selected as the default handler for an AID group by the user, or
+     the terminal must select *all* AIDs defined in the category simultaneously ("exact match").
+-->
+<!-- BEGIN_INCLUDE(CardEmulationXML) -->
+<host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/app_name"
+    android:requireDeviceUnlock="false">
+    <aid-group android:description="@string/app_name" android:category="other">
+        <aid-filter android:name="F222222222"/>
+    </aid-group>
+    <!-- END_INCLUDE(CardEmulationXML) -->
+</host-apdu-service>
