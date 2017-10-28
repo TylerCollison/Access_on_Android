@@ -125,7 +125,7 @@ public class FacialRegSu implements FacialRecog{
     }
 
     /**
-     * Given two images, report whether they match with a SIMILARITY_THREASHOLD certainty.
+     * Given two images, report whether they match with a SIMILARITY_THRESHOLD certainty.
      * @param imageOnFile
      * @param target
      * @return
