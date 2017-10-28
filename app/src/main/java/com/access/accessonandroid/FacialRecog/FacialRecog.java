@@ -12,8 +12,12 @@ public interface FacialRecog {
     /**
      * Most recommended method for comparing faces.
      *
-     * Will create a new thread in order to compare faces. Will only allow one facial comparison operation to take place at any given time.
-     * If a facial comparison operation is already in progress when this function is invoked, it will return false.
+     * Will create a new thread in order to compare faces. Will only allow one facial comparison request to take place at any given time.
+     * If a facial comparison request is already being carried out when this function is invoked, it will return false.
+     *
+     * If the client wants to run more than one facial comparison request in parallel, the client can use the method
+     * compareFaces(Image imageOnFile, Image target).
+     *
      * @param imageOnFile
      * @param target
      * @param callbackFunc  The function to invoke when the comparison is finished

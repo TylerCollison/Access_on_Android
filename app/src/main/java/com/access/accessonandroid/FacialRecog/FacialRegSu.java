@@ -140,7 +140,7 @@ public class FacialRegSu implements FacialRecog{
 
         /* Detect how many faces are in the given picture */
         int numOfFacesDetected = detectFaces(target);
-        System.out.println("Number of faces detected: " + numOfFacesDetected);
+//        System.out.println("Number of faces detected: " + numOfFacesDetected);
         if (numOfFacesDetected != 1) {      // if the target image has 0 or more than 1 faces in it
             return isMatched;               // return no match
         }
@@ -159,8 +159,8 @@ public class FacialRegSu implements FacialRecog{
         // Check if there is a match.
         isMatched = faceDetails.size() == 1;
 
-        System.out.println("Comparing Faces...");
-        System.out.println("The result is: " + isMatched + " Hohoho!");
+//        System.out.println("Comparing Faces...");
+//        System.out.println("The result is: " + isMatched + " Hohoho!");
 
         return isMatched;
     }
@@ -279,121 +279,121 @@ public class FacialRegSu implements FacialRecog{
 
 
 
-    /**
-     * Only here for my sanity. You can safely ignore this method.
-     *
-     * @param applicationContext
-     * @return
-     * @throws Exception
-     */
-    private boolean mikes_test(android.content.Context applicationContext) throws Exception {
-        String IDENTITY_POOL_ID = "intentionally scambled********";
-        String photo = "my_face.jpg";
-        String bucket = "infosecurity";
-
-
-        // Initialize the Amazon Cognito credentials provider
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                applicationContext,
-                IDENTITY_POOL_ID, // Identity pool ID
-                Regions.US_EAST_1 // Region
-        );
-
-
-        AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
-
-
-        /* DETECTLABELSREQUEST */
-//        DetectLabelsRequest request = new DetectLabelsRequest()
-//                .withImage(new Image()
-//                        .withS3Object(new S3Object()
-//                                .withName(photo).withBucket(bucket)))
-//                .withMaxLabels(10)
-//                .withMinConfidence(75F);
+//    /**
+//     * Only here for my sanity. You can safely ignore this method.
+//     *
+//     * @param applicationContext
+//     * @return
+//     * @throws Exception
+//     */
+//    private boolean mikes_test(android.content.Context applicationContext) throws Exception {
+//        String IDENTITY_POOL_ID = "intentionally scambled********";
+//        String photo = "my_face.jpg";
+//        String bucket = "infosecurity";
 //
-//        try {
-//            DetectLabelsResult result = client.detectLabels(request);
-//            List <Label> labels = result.getLabels();
 //
-//            System.out.println("Detected labels for " + photo);
-//            for (Label label: labels) {
-//                System.out.println(label.getName() + ": " + label.getConfidence().toString());
-//            }
-//        } // catch(AmazonRekognitionException e) {
+//        // Initialize the Amazon Cognito credentials provider
+//        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+//                applicationContext,
+//                IDENTITY_POOL_ID, // Identity pool ID
+//                Regions.US_EAST_1 // Region
+//        );
+//
+//
+//        AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
+//
+//
+//        /* DETECTLABELSREQUEST */
+////        DetectLabelsRequest request = new DetectLabelsRequest()
+////                .withImage(new Image()
+////                        .withS3Object(new S3Object()
+////                                .withName(photo).withBucket(bucket)))
+////                .withMaxLabels(10)
+////                .withMinConfidence(75F);
+////
+////        try {
+////            DetectLabelsResult result = client.detectLabels(request);
+////            List <Label> labels = result.getLabels();
+////
+////            System.out.println("Detected labels for " + photo);
+////            for (Label label: labels) {
+////                System.out.println(label.getName() + ": " + label.getConfidence().toString());
+////            }
+////        } // catch(AmazonRekognitionException e) {
+//////            e.printStackTrace();
+//////        }
+////        catch (Exception e) {           // Don't know what to do with this! To-DO
 ////            e.printStackTrace();
 ////        }
-//        catch (Exception e) {           // Don't know what to do with this! To-DO
-//            e.printStackTrace();
+//
+//        /* Comapre Faces */
+//        Float similarityThreshold = this.SIMILARITY_THRESHOLD;
+//        String sourceImageName = "target.jpg";
+//        String targetImageName = "target_2.jpg";
+//        String sourceBucket = "infosecurity";
+//        String targetBucket = "infosecurity";
+//        ByteBuffer sourceImageBytes=null;
+//        ByteBuffer targetImageBytes=null;
+//
+//
+////        //Load source and target images and create input parameters
+////        try (InputStream inputStream = new FileInputStream(new File(sourceImage))) {
+////            sourceImageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
+////        }
+////        catch(Exception e)
+////        {
+////            System.out.println("Failed to load source image " + sourceImage);
+////            System.exit(1);
+////        }
+////        try (InputStream inputStream = new FileInputStream(new File(targetImage))) {
+////            targetImageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
+////        }
+////        catch(Exception e)
+////        {
+////            System.out.println("Failed to load target images: " + targetImage);
+////            System.exit(1);
+////        }
+//
+////        Image source=new Image()
+////                .withBytes(sourceImageBytes);
+////        Image target=new Image()
+////                .withBytes(targetImageBytes);
+//
+//        Image source = new Image().withS3Object(new S3Object()
+//                .withName(sourceImageName)
+//                .withBucket(sourceBucket));
+//        Image target = new Image().withS3Object(new S3Object()
+//                .withName(targetImageName)
+//                .withBucket(targetBucket));
+//
+//        CompareFacesRequest request = new CompareFacesRequest()
+//                .withSourceImage(source)
+//                .withTargetImage(target)
+//                .withSimilarityThreshold(similarityThreshold);
+//
+//
+//        // Call operation
+//        CompareFacesResult compareFacesResult=client.compareFaces(request);
+//
+//        // Display results
+//        List <CompareFacesMatch> faceDetails = compareFacesResult.getFaceMatches();
+//        for (CompareFacesMatch match: faceDetails){
+//            ComparedFace face= match.getFace();
+//            BoundingBox position = face.getBoundingBox();
+//            System.out.println("Face at " + position.getLeft().toString()
+//                    + " " + position.getTop()
+//                    + " matches with " + face.getConfidence().toString()
+//                    + "% confidence.");
+//
 //        }
-
-        /* Comapre Faces */
-        Float similarityThreshold = this.SIMILARITY_THRESHOLD;
-        String sourceImageName = "target.jpg";
-        String targetImageName = "target_2.jpg";
-        String sourceBucket = "infosecurity";
-        String targetBucket = "infosecurity";
-        ByteBuffer sourceImageBytes=null;
-        ByteBuffer targetImageBytes=null;
-
-
-//        //Load source and target images and create input parameters
-//        try (InputStream inputStream = new FileInputStream(new File(sourceImage))) {
-//            sourceImageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
-//        }
-//        catch(Exception e)
-//        {
-//            System.out.println("Failed to load source image " + sourceImage);
-//            System.exit(1);
-//        }
-//        try (InputStream inputStream = new FileInputStream(new File(targetImage))) {
-//            targetImageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
-//        }
-//        catch(Exception e)
-//        {
-//            System.out.println("Failed to load target images: " + targetImage);
-//            System.exit(1);
-//        }
-
-//        Image source=new Image()
-//                .withBytes(sourceImageBytes);
-//        Image target=new Image()
-//                .withBytes(targetImageBytes);
-
-        Image source = new Image().withS3Object(new S3Object()
-                .withName(sourceImageName)
-                .withBucket(sourceBucket));
-        Image target = new Image().withS3Object(new S3Object()
-                .withName(targetImageName)
-                .withBucket(targetBucket));
-
-        CompareFacesRequest request = new CompareFacesRequest()
-                .withSourceImage(source)
-                .withTargetImage(target)
-                .withSimilarityThreshold(similarityThreshold);
-
-
-        // Call operation
-        CompareFacesResult compareFacesResult=client.compareFaces(request);
-
-        // Display results
-        List <CompareFacesMatch> faceDetails = compareFacesResult.getFaceMatches();
-        for (CompareFacesMatch match: faceDetails){
-            ComparedFace face= match.getFace();
-            BoundingBox position = face.getBoundingBox();
-            System.out.println("Face at " + position.getLeft().toString()
-                    + " " + position.getTop()
-                    + " matches with " + face.getConfidence().toString()
-                    + "% confidence.");
-
-        }
-
-        System.out.println("There were " + faceDetails.size()
-                + " that did match");
-
-        /* End of Compare Faces */
-
-        return true;
-    }
+//
+//        System.out.println("There were " + faceDetails.size()
+//                + " that did match");
+//
+//        /* End of Compare Faces */
+//
+//        return true;
+//    }
 
 
 
