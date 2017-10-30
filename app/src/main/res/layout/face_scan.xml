@@ -22,6 +22,7 @@
     </FrameLayout>
 
     <Button
+    <!--we don't need to keep this if we're doing auto-capture-->
         android:id="@+id/button_capture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,6 +40,17 @@
         app:fabSize="mini"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Instructions will go here
+
+1. xxxxxxxxxxxxx
+2. xxxxxxxxxxxxx
+3. xxxxxxxxxxxxx"
+        android:layout_below="@+id/floatingActionButton" />
 
     <!--we don't need to keep this if we're doing auto-capture-->
 
