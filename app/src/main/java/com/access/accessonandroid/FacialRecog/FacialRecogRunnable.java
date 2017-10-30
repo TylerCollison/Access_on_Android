@@ -9,7 +9,7 @@ import com.amazonaws.services.rekognition.model.Image;
 
 public class FacialRecogRunnable implements Runnable {
     private boolean[] result;
-    FacialRecog facialRecogObject;
+    private FacialRecog facialRecogObject;
 
     private Image sourceImage;
     private Image targetImage;
