@@ -3,12 +3,13 @@ package com.access.accessonandroid.FacialRecog;
 import com.amazonaws.services.rekognition.model.Image;
 
 /**
+ * You shouldn't have to understand what this class does
  * Created by suzey on 10/26/2017.
  */
 
 public class FacialRecogRunnable implements Runnable {
     private boolean[] result;
-    FacialRecog facialRecogObject;
+    private FacialRecog facialRecogObject;
 
     private Image sourceImage;
     private Image targetImage;
