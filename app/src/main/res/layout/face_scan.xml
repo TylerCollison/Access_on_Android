@@ -22,7 +22,7 @@
     </FrameLayout>
 
     <Button
-    <!--we don't need to keep this if we're doing auto-capture-->
+   // <!--we don't need to keep this if we're doing auto-capture-->
         android:id="@+id/button_capture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Instructions will go here
+        <!--android:text="Instructions will go here-->
 
 1. xxxxxxxxxxxxx
 2. xxxxxxxxxxxxx
