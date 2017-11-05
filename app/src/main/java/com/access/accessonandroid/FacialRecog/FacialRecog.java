@@ -8,6 +8,11 @@ import com.amazonaws.services.rekognition.model.Image;
 
 
 public interface FacialRecog {
+    /**
+     * All image files passed to any functions in this interface should be of the format PNG or JPEG
+     */
+
+
 
     /**
      * Most recommended method for comparing faces.
