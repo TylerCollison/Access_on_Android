@@ -19,7 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Registration"></activity>
-
+        <uses-permission android:name="android.permission.CAMERA" />
+        <uses-feature android:name="android.hardware.camera" />
+        <uses-feature android:name="android.hardware.camera.autofocus" />
         <!-- BEGIN_INCLUDE(CardEmulationManifest) -->
         <!-- Service for handling communication with NFC terminal. -->
         <service android:name=".NFC.Services.AccessCardService"
@@ -33,7 +35,8 @@
             <!-- Required XML configuration file, listing the AIDs that we are emulating cards
                  for. This defines what protocols our card emulation service supports. -->
             <meta-data android:name="android.nfc.cardemulation.host_apdu_service"
-                android:resource="@xml/aid_list"/>
+                android:resource="@xml/aid_list"
+                />
         </service>
         <!-- END_INCLUDE(CardEmulationManifest) -->
 
