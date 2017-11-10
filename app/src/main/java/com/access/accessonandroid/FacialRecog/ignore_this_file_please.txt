@@ -1,0 +1,22 @@
+        FacialRecogCallbackFuncObj callBackFunc = new com.access.accessonandroid.FacialRecog.FacialRecogCallbackFuncObj() {
+            @Override
+            public void execute(boolean facialComparResult) {
+                System.out.println("This is the call back function");
+                System.out.println("The face matching result I have is: " + facialComparResult);
+            }
+        };
+
+        //Testing Code by Mike
+        FacialRegSu tst_su = new FacialRegSu(getApplicationContext());
+        Image pict_1 = FacialRegSu.makeImageFromS3File("my_face_sample.jpg", "infosecurity");
+//        Image pict_2 = FacialRegSu.makeImageFromS3File("will_not_match.jpg", "infosecurity");
+        Image pict_2 = FacialRegSu.makeImageFromS3File("multiple_faces.jpg", "infosecurity");
+        System.out.println(pict_2);
+//        Image pict_2 = FacialRegSu.makeImageFromS3File("target.jpg", "infosecurity");
+
+//        boolean result_tmp = tst_su.compareFacesThreadedBlocking(pict_1, pict_2);
+
+
+//        boolean hasRun = tst_su.compareFacesWithCallbackFunc(pict_1, pict_2, callBackFunc);
+//        System.out.println("Whether facial recognition has been initiated: " + hasRun);
+

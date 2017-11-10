@@ -7,32 +7,25 @@ package com.access.accessonandroid.FacialRecog;
 //
 import android.content.Context;
 
-import android.util.Log;
-import java.util.ArrayList;
-
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClient;
 //import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.auth.AWSCredentials;
 //import com.amazonaws.auth.AWSStaticCredentialsProvider;
 //import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 //import com.amazonaws.services.rekognition.model.AmazonRekognitionException;
 import com.amazonaws.services.rekognition.model.DetectLabelsRequest;
-import com.amazonaws.services.rekognition.model.DetectLabelsResult;
 import com.amazonaws.services.rekognition.model.Image;
-import com.amazonaws.services.rekognition.model.Label;
 import com.amazonaws.services.rekognition.model.S3Object;
 import java.util.List;
 
 /* Detect Face Staff */
-//import com.amazonaws.services.rekognition.model.Attribute;
-//import com.amazonaws.services.rekognition.model.DetectFacesRequest;
-//import com.amazonaws.services.rekognition.model.DetectFacesResult;
-//import com.amazonaws.services.rekognition.model.FaceDetail;
+import com.amazonaws.services.rekognition.model.Attribute;
+import com.amazonaws.services.rekognition.model.DetectFacesRequest;
+import com.amazonaws.services.rekognition.model.DetectFacesResult;
+import com.amazonaws.services.rekognition.model.FaceDetail;
 //import com.amazonaws.services.rekognition.model.AgeRange;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 /* End of Detect Face Staff */
@@ -50,13 +43,10 @@ import com.amazonaws.services.rekognition.model.ComparedFace;
 import com.amazonaws.services.rekognition.model.BoundingBox;
 
 /* Theads staff */
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class FacialRegSu implements FacialRecog{
+    private Thread newThread;
+
     private Float SIMILARITY_THRESHOLD;
     private Context applicationContext;
     private CognitoCachingCredentialsProvider generalAwsCredential;
@@ -65,12 +55,18 @@ public class FacialRegSu implements FacialRecog{
     /**
      * Constructor
      * @param androidAppContext
-     * @param awsCredential
+//     * @param awsCredential
      */
-    public FacialRegSu(Context androidAppContext, CognitoCachingCredentialsProvider awsCredential) {
+    public FacialRegSu(Context androidAppContext) {                                         // , CognitoCachingCredentialsProvider awsCredential
+        this.newThread = null;
+
         this.SIMILARITY_THRESHOLD = 70F;
-        this.applicationContext = androidAppContext;
-        this.generalAwsCredential = awsCredential;
+        this.applicationContext = androidAppContext;                                        //        this.generalAwsCredential = awsCredential;
+        this.generalAwsCredential = new CognitoCachingCredentialsProvider(      // @TODO Should move this out eventually
+                this.applicationContext,
+                "***scambled****", // Identity pool ID
+                Regions.US_EAST_1 // Region
+        );
     }
 //
 //    private class MyCallable implements Callable<Boolean> {
@@ -88,18 +84,71 @@ public class FacialRegSu implements FacialRecog{
 //
 
     /**
-     * Given two images, report whether they match with a SIMILARITY_THREASHOLD certainty.
-     * @param imageA
-     * @param imageB
-     * @return
+     * Mainly used as a helper function
+     * @param pic
+     * @return Number of faces detected
      */
-    public boolean compareFaces(Image imageA, Image imageB) {
+    public int detectFaces(Image pic) {
+        int numOfFacesDetected = 0;         // Default is 0
+
         CognitoCachingCredentialsProvider credentialsProvider = this.generalAwsCredential;
         AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
 
+        DetectFacesRequest detectFaceRequest = new DetectFacesRequest()
+                .withImage(pic);
+        try {
+            DetectFacesResult result = client.detectFaces(detectFaceRequest);
+            List < FaceDetail > faceDetails = result.getFaceDetails();
+            numOfFacesDetected = faceDetails.size();
+
+//            for (FaceDetail face: faceDetails) {
+//                if (detectFaceRequest.getAttributes().contains("ALL")) {
+//                    AgeRange ageRange = face.getAgeRange();
+//                    System.out.println("The detected face is estimated to be between "
+//                            + ageRange.getLow().toString() + " and " + ageRange.getHigh().toString()
+//                            + " years old.");
+//                    System.out.println("Here's the complete set of attributes:");
+//                } else { // non-default attributes have null values.
+//                    System.out.println("Here's the default set of attributes:");
+//                }
+//
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(face));
+//            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return numOfFacesDetected;
+    }
+
+    /**
+     * Given two images, report whether they match with a SIMILARITY_THRESHOLD certainty.
+     * @param imageOnFile
+     * @param target
+     * @return
+     */
+    public boolean compareFaces(Image imageOnFile, Image target) {
+        // Initialize the Amazon Cognito credentials provider
+        boolean isMatched = false;
+
+
+        CognitoCachingCredentialsProvider credentialsProvider = this.generalAwsCredential;
+        AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
+
+        /* Detect how many faces are in the given picture */
+        int numOfFacesDetected = detectFaces(target);
+//        System.out.println("Number of faces detected: " + numOfFacesDetected);
+        if (numOfFacesDetected != 1) {      // if the target image has 0 or more than 1 faces in it
+            return isMatched;               // return no match
+        }
+
+
         CompareFacesRequest request = new CompareFacesRequest()
-                .withSourceImage(imageA)
-                .withTargetImage(imageB)
+                .withSourceImage(imageOnFile)
+                .withTargetImage(target)
                 .withSimilarityThreshold(this.SIMILARITY_THRESHOLD);
 
         CompareFacesResult compareFacesResult=client.compareFaces(request);
@@ -107,72 +156,70 @@ public class FacialRegSu implements FacialRecog{
         // Display results
         List <CompareFacesMatch> faceDetails = compareFacesResult.getFaceMatches();
 
-        // Check if there is a match. This is currently flawed
-        boolean isMatched = faceDetails.size() == 1;
+        // Check if there is a match.
+        isMatched = faceDetails.size() == 1;
+
+//        System.out.println("Comparing Faces...");
+//        System.out.println("The result is: " + isMatched + " Hohoho!");
 
         return isMatched;
     }
 
 
 
-    public boolean compareFacesThreaded(final Image imageA, final Image imageB) {
-        boolean isMatch = false;
 
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-        List<Future<Boolean>> list = new ArrayList<Future<Boolean>>();
-        Callable<Boolean> callable = new Callable() {
+    public boolean compareFacesThreadedBlocking(final Image imageOnFile, final Image target) {
+        boolean isMatch = false;            // default facial comparison result
+
+        final boolean[] facialCompResult = new boolean[1];
+        facialCompResult[0] = false;         //default facial comparison result
+
+        Runnable codeToRunOnNewThread = new FacialRecogRunnable(this, imageOnFile, target, facialCompResult);
+
+        if (this.newThread != null && this.newThread.isAlive()) {          // A thread is already running. Ignore facial comparison request and return false
+            return isMatch;
+        }
+        this.newThread = new Thread(codeToRunOnNewThread);
+        this.newThread.start();
+        try {
+            this.newThread.join();
+            isMatch = facialCompResult[0];      // Once the thread is finished the result will be stored at facialCompResult[0]
+
+        }catch(InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("Something wrong with the facial recognition threaded face comparison!");
+        }
+
+        return isMatch;
+
+    }
+
+
+
+    public boolean compareFacesWithCallbackFunc(final Image imageOnFile, final Image target, final FacialRecogCallbackFuncObj callbackFunc) {
+        boolean comparisonInitiated = false;            // default facial comparison result
+
+        // THIS IS NOT PERFECT. IT DOES NOT ACCOUNT FOR RACE CONDITION. BUT FOR THE PURPOSE OF A DEMONSTRATION IT SHOULD SUFFICE
+        if (this.newThread != null && this.newThread.isAlive()) {          // A thread is already running. Ignore facial comparison request and return false
+            return comparisonInitiated;
+        }
+
+        Runnable codeToRunOnNewThread = new Runnable() {
             @Override
-            public Boolean call() throws Exception {
+            public void run() {
                 boolean result = false;
-                try {
-                    result = compareFaces(imageA, imageB);
-                } catch (Exception e) {
-                    System.out.println("Something went wrong..");
-                }
-                return result;
+                result = compareFaces(imageOnFile, target);
+                callbackFunc.execute(result);           // invoke callback function
             }
         };
 
-        Future<Boolean> future = executor.submit(callable);
+        this.newThread = new Thread(codeToRunOnNewThread);
+        this.newThread.start();
+        comparisonInitiated = true;
 
-        try {
-            //print the return value of Future, notice the output delay in console
-            // because Future.get() waits for task to get completed
-            isMatch = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        executor.shutdown();
-        return isMatch;
-
-
-        // ----------- Mike's Code ----------------
-//        new Thread(new Runnable(){
-//            @Override
-//            public void run() {
-//                try {
-//                    mikes_test();
-//                } catch(Exception e) {
-//                    System.out.println("Something went wrong..");
-//                }
-//            }
-//        }).start();
-        // -------------- End of Mike's Code ----------
-
-//
-//
-//
-//        ExecutorService pool = Executors.newFixedThreadPool(3);
-//        Set<Future<Integer>> set = new HashSet<Future<Integer>>();
-//        Callable<Integer> callable = new WordLengthCallable(word);
-//        Future<Integer> future = pool.submit(callable);
-//        set.add(future);
-//        for (Future<Integer> future : set) {
-//            result = future.get();
-//        }
-//
-//        return result;
+        return comparisonInitiated;
     }
+
 
 
 
@@ -189,7 +236,7 @@ public class FacialRegSu implements FacialRecog{
         catch(Exception e)
         {
             System.out.println("Failed to load source image " + filePath);
-            System.exit(1);                                                         // #ToDo Probably shouldn't exit the program!
+//            System.exit(1);                                                         // #ToDo Probably shouldn't exit the program!
         }
 
         Image result=new Image()
@@ -232,121 +279,121 @@ public class FacialRegSu implements FacialRecog{
 
 
 
-    /**
-     * Only here for my sanity. You can safely ignore this method.
-     *
-     * @param applicationContext
-     * @return
-     * @throws Exception
-     */
-    private boolean mikes_test(android.content.Context applicationContext) throws Exception {
-        String IDENTITY_POOL_ID = "intentionally scambled********";
-        String photo = "my_face.jpg";
-        String bucket = "infosecurity";
-
-
-        // Initialize the Amazon Cognito credentials provider
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                applicationContext,
-                IDENTITY_POOL_ID, // Identity pool ID
-                Regions.US_EAST_1 // Region
-        );
-
-
-        AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
-
-
-        /* DETECTLABELSREQUEST */
-//        DetectLabelsRequest request = new DetectLabelsRequest()
-//                .withImage(new Image()
-//                        .withS3Object(new S3Object()
-//                                .withName(photo).withBucket(bucket)))
-//                .withMaxLabels(10)
-//                .withMinConfidence(75F);
+//    /**
+//     * Only here for my sanity. You can safely ignore this method.
+//     *
+//     * @param applicationContext
+//     * @return
+//     * @throws Exception
+//     */
+//    private boolean mikes_test(android.content.Context applicationContext) throws Exception {
+//        String IDENTITY_POOL_ID = "intentionally scambled********";
+//        String photo = "my_face.jpg";
+//        String bucket = "infosecurity";
 //
-//        try {
-//            DetectLabelsResult result = client.detectLabels(request);
-//            List <Label> labels = result.getLabels();
 //
-//            System.out.println("Detected labels for " + photo);
-//            for (Label label: labels) {
-//                System.out.println(label.getName() + ": " + label.getConfidence().toString());
-//            }
-//        } // catch(AmazonRekognitionException e) {
+//        // Initialize the Amazon Cognito credentials provider
+//        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+//                applicationContext,
+//                IDENTITY_POOL_ID, // Identity pool ID
+//                Regions.US_EAST_1 // Region
+//        );
+//
+//
+//        AmazonRekognition client = new AmazonRekognitionClient(credentialsProvider);
+//
+//
+//        /* DETECTLABELSREQUEST */
+////        DetectLabelsRequest request = new DetectLabelsRequest()
+////                .withImage(new Image()
+////                        .withS3Object(new S3Object()
+////                                .withName(photo).withBucket(bucket)))
+////                .withMaxLabels(10)
+////                .withMinConfidence(75F);
+////
+////        try {
+////            DetectLabelsResult result = client.detectLabels(request);
+////            List <Label> labels = result.getLabels();
+////
+////            System.out.println("Detected labels for " + photo);
+////            for (Label label: labels) {
+////                System.out.println(label.getName() + ": " + label.getConfidence().toString());
+////            }
+////        } // catch(AmazonRekognitionException e) {
+//////            e.printStackTrace();
+//////        }
+////        catch (Exception e) {           // Don't know what to do with this! To-DO
 ////            e.printStackTrace();
 ////        }
-//        catch (Exception e) {           // Don't know what to do with this! To-DO
-//            e.printStackTrace();
+//
+//        /* Comapre Faces */
+//        Float similarityThreshold = this.SIMILARITY_THRESHOLD;
+//        String sourceImageName = "target.jpg";
+//        String targetImageName = "target_2.jpg";
+//        String sourceBucket = "infosecurity";
+//        String targetBucket = "infosecurity";
+//        ByteBuffer sourceImageBytes=null;
+//        ByteBuffer targetImageBytes=null;
+//
+//
+////        //Load source and target images and create input parameters
+////        try (InputStream inputStream = new FileInputStream(new File(sourceImage))) {
+////            sourceImageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
+////        }
+////        catch(Exception e)
+////        {
+////            System.out.println("Failed to load source image " + sourceImage);
+////            System.exit(1);
+////        }
+////        try (InputStream inputStream = new FileInputStream(new File(targetImage))) {
+////            targetImageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
+////        }
+////        catch(Exception e)
+////        {
+////            System.out.println("Failed to load target images: " + targetImage);
+////            System.exit(1);
+////        }
+//
+////        Image source=new Image()
+////                .withBytes(sourceImageBytes);
+////        Image target=new Image()
+////                .withBytes(targetImageBytes);
+//
+//        Image source = new Image().withS3Object(new S3Object()
+//                .withName(sourceImageName)
+//                .withBucket(sourceBucket));
+//        Image target = new Image().withS3Object(new S3Object()
+//                .withName(targetImageName)
+//                .withBucket(targetBucket));
+//
+//        CompareFacesRequest request = new CompareFacesRequest()
+//                .withSourceImage(source)
+//                .withTargetImage(target)
+//                .withSimilarityThreshold(similarityThreshold);
+//
+//
+//        // Call operation
+//        CompareFacesResult compareFacesResult=client.compareFaces(request);
+//
+//        // Display results
+//        List <CompareFacesMatch> faceDetails = compareFacesResult.getFaceMatches();
+//        for (CompareFacesMatch match: faceDetails){
+//            ComparedFace face= match.getFace();
+//            BoundingBox position = face.getBoundingBox();
+//            System.out.println("Face at " + position.getLeft().toString()
+//                    + " " + position.getTop()
+//                    + " matches with " + face.getConfidence().toString()
+//                    + "% confidence.");
+//
 //        }
-
-        /* Comapre Faces */
-        Float similarityThreshold = this.SIMILARITY_THRESHOLD;
-        String sourceImageName = "target.jpg";
-        String targetImageName = "target_2.jpg";
-        String sourceBucket = "infosecurity";
-        String targetBucket = "infosecurity";
-        ByteBuffer sourceImageBytes=null;
-        ByteBuffer targetImageBytes=null;
-
-
-//        //Load source and target images and create input parameters
-//        try (InputStream inputStream = new FileInputStream(new File(sourceImage))) {
-//            sourceImageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
-//        }
-//        catch(Exception e)
-//        {
-//            System.out.println("Failed to load source image " + sourceImage);
-//            System.exit(1);
-//        }
-//        try (InputStream inputStream = new FileInputStream(new File(targetImage))) {
-//            targetImageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
-//        }
-//        catch(Exception e)
-//        {
-//            System.out.println("Failed to load target images: " + targetImage);
-//            System.exit(1);
-//        }
-
-//        Image source=new Image()
-//                .withBytes(sourceImageBytes);
-//        Image target=new Image()
-//                .withBytes(targetImageBytes);
-
-        Image source = new Image().withS3Object(new S3Object()
-                .withName(sourceImageName)
-                .withBucket(sourceBucket));
-        Image target = new Image().withS3Object(new S3Object()
-                .withName(targetImageName)
-                .withBucket(targetBucket));
-
-        CompareFacesRequest request = new CompareFacesRequest()
-                .withSourceImage(source)
-                .withTargetImage(target)
-                .withSimilarityThreshold(similarityThreshold);
-
-
-        // Call operation
-        CompareFacesResult compareFacesResult=client.compareFaces(request);
-
-        // Display results
-        List <CompareFacesMatch> faceDetails = compareFacesResult.getFaceMatches();
-        for (CompareFacesMatch match: faceDetails){
-            ComparedFace face= match.getFace();
-            BoundingBox position = face.getBoundingBox();
-            System.out.println("Face at " + position.getLeft().toString()
-                    + " " + position.getTop()
-                    + " matches with " + face.getConfidence().toString()
-                    + "% confidence.");
-
-        }
-
-        System.out.println("There were " + faceDetails.size()
-                + " that did match");
-
-        /* End of Compare Faces */
-
-        return true;
-    }
+//
+//        System.out.println("There were " + faceDetails.size()
+//                + " that did match");
+//
+//        /* End of Compare Faces */
+//
+//        return true;
+//    }
 
 
 

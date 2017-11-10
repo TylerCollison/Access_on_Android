@@ -10,33 +10,52 @@ import com.amazonaws.services.rekognition.model.Image;
 public interface FacialRecog {
 
     /**
-     * Given two images, report whether they match with a SIMILARITY_THREASHOLD certainty.
+     * Most recommended method for comparing faces.
      *
-     * @param source
+     * Will create a new thread in order to compare faces. Will only allow one facial comparison request to take place at any given time.
+     * If a facial comparison request is already being carried out when this function is invoked, it will return false.
+     *
+     * If the client wants to run more than one facial comparison request in parallel, the client can use the method
+     * compareFaces(Image imageOnFile, Image target).
+     *
+     * @param imageOnFile
      * @param target
-     * @return
+     * @param callbackFunc  The function to invoke when the comparison is finished
+     * @return Whether a facial comparison procedure is initiated by a call to this function
      */
-    public boolean compareFaces(Image source, Image target);
+    public boolean compareFacesWithCallbackFunc(final Image imageOnFile, final Image target, final FacialRecogCallbackFuncObj callbackFunc);
+
+
+    /**
+     * Given two images, report whether they match with a SIMILARITY_THREASHOLD certainty.
+     * Contains network operation so cannot be called by the main thread.
+     *
+     * @param imageOnFile
+     * @param target
+     * @return Whether the face in imageOnFile matches the face in target
+     */
+    public boolean compareFaces(Image imageOnFile, Image target);
 
 
     /**
      * Create a new thread before asking AWS Rekognition to comparefaces. Do not use unless absolutely necessary.
-     * @param imageA
-     * @param imageB
-     * @return
+     * @param imageOnFile
+     * @param target
+     * @return Whether the face in imageOnFile matches the face in target
      */
-    public boolean compareFacesThreaded(final Image imageA, final Image imageB);
+    public boolean compareFacesThreadedBlocking(final Image imageOnFile, final Image target);
+
+
 
 
     /**
-     * NOT YET IMPLEMENTED
-     * @param s3FileName_1
-     * @param s3BucketName_1
-     * @param s3FileName_2
-     * @param s3BucketName_2
-     * @return
+     * Report how many faces are in a given picture
+     * @param pic
+     * @return  number of faces in a given picture
      */
-//    public boolean comapreFaces(String s3FileName_1, String s3BucketName_1, String s3FileName_2, String s3BucketName_2);
+    public int detectFaces(Image pic);
+
+
 
 
 
