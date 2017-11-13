@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.access.accessonandroid"
@@ -30,6 +30,7 @@ dependencies {
 
     // ---------------- End of Michael Su Staff ----------------
     //compile 'com.android.support.constraint:constraint-layout:+'
+
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.amazonaws:aws-android-sdk-core:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-s3:2.2.+'
@@ -38,4 +39,5 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-rekognition:2.4.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:design:25.3.1'
 }

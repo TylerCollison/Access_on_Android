@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.access.accessonandroid.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+
+        android:layout_marginLeft="23dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/floatingActionButton">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="216dp"
+            android:layout_height="318dp"
+
+            android:text="How to Use Authenticator
+    Step 1. Point the front camera at your face and center your face in the screen.
+    Step 2. Place your finger on the fingerprint scanner while keeping the camera pointed at your face.
+    Step 3. etc. " />
+    </FrameLayout>
+    <!--we don't need to keep this if we're doing auto-capture-->
+    <Button
+        android:id="@+id/button_capture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Capture"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="display"
+        android:src="@android:drawable/ic_menu_help"
+        app:fabSize="mini"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <!--we don't need to keep this if we're doing auto-capture-->
+
+</RelativeLayout>
+
+
