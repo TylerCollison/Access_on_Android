@@ -4,12 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 
-import com.access.accessonandroid.FacialRecog.FacialRecogCallbackFuncObj;
-import com.access.accessonandroid.FacialRecog.FacialRegSu;
-import com.access.accessonandroid.FacialRecog.FacialRecog;
-import com.amazonaws.services.rekognition.model.Image;
-
-import java.util.concurrent.TimeUnit;
+import com.access.accessonandroid.Camera.CameraActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+//        startActivity(new Intent(MainActivity.this, CameraActivity.class));
         //maybe this will all be abstracted away from here later
 //        setContentView(R.layout.activity_main);
 //        startActivity(new Intent(MainActivity.this, Registration.class));

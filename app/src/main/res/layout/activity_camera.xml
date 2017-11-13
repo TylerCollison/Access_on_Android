@@ -4,6 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.access.accessonandroid.CameraActivity">
+    tools:context="com.access.accessonandroid.Camera.CameraActivity">
+
+    <TextureView
+        android:id="@+id/textureView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Capture"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="465dp" />
 
 </android.support.constraint.ConstraintLayout>
