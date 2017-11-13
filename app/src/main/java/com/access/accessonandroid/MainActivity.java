@@ -7,6 +7,7 @@ import android.content.Intent;
 import com.access.accessonandroid.FacialRecog.FacialRecogCallbackFuncObj;
 import com.access.accessonandroid.FacialRecog.FacialRegSu;
 import com.access.accessonandroid.FacialRecog.FacialRecog;
+import com.access.accessonandroid.Registration.Registration;
 import com.amazonaws.services.rekognition.model.Image;
 
 import java.util.concurrent.TimeUnit;
@@ -18,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //maybe this will all be abstracted away from here later
-//        setContentView(R.layout.activity_main);
-//        startActivity(new Intent(MainActivity.this, Registration.class));
+        startActivity(new Intent(MainActivity.this, Registration.class));
+        setContentView(R.layout.activity_main);
 
         //code to run authenticator class which will authenticate the user
 //        Authenticator authenticator = new Authenticator();

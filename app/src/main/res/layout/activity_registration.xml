@@ -36,7 +36,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:onClick="login"
         android:text="Sign In"
         android:layout_below="@+id/password"
         android:layout_centerHorizontal="true" />
