@@ -15,22 +15,42 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
 
-        android:layout_marginLeft="49dp"
+        android:layout_marginLeft="23dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true">
+        android:layout_toRightOf="@+id/floatingActionButton">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="216dp"
+            android:layout_height="318dp"
+
+            android:text="How to Use Authenticator
+    Step 1. Point the front camera at your face and center your face in the screen.
+    Step 2. Place your finger on the fingerprint scanner while keeping the camera pointed at your face.
+    Step 3. etc. " />
     </FrameLayout>
+    <!--we don't need to keep this if we're doing auto-capture-->
+    <Button
+        android:id="@+id/button_capture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Capture"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:onClick="display"
         android:src="@android:drawable/ic_menu_help"
         app:fabSize="mini"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
+    <!--we don't need to keep this if we're doing auto-capture-->
 
 </RelativeLayout>
 

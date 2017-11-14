@@ -22,16 +22,22 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.amazonaws:aws-android-sdk-core:2.4.2'
-    compile 'com.amazonaws:aws-android-sdk-s3:2.4.2'
-    compile 'com.amazonaws:aws-android-sdk-ddb:2.4.2'
-    compile 'com.amazonaws:aws-android-sdk-cognito:2.4.2'
-    compile 'com.amazonaws:aws-android-sdk-rekognition:2.4.2'
+    // ---------------- added by Michael Su ----------------
+    //    compile 'com.amazonaws:aws-android-sdk-rekognition:2.3.9'
+    //    compile 'com.amazonaws:aws-java-sdk:+'
+
+    // ---------------- End of Michael Su Staff ----------------
     //compile 'com.android.support.constraint:constraint-layout:+'
+
+    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.amazonaws:aws-android-sdk-core:2.2.+'
+    compile 'com.amazonaws:aws-android-sdk-s3:2.2.+'
+    compile 'com.amazonaws:aws-android-sdk-ddb:2.2.+'
+    compile 'com.amazonaws:aws-android-sdk-cognito:2.2.+'
+    compile 'com.amazonaws:aws-android-sdk-rekognition:2.4.2'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:design:25.3.1'
 }
