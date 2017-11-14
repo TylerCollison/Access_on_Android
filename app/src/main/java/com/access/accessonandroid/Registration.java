@@ -23,10 +23,10 @@ public class Registration extends AppCompatActivity {
                 String enteredUsername = username.getText().toString();
                 String enteredPassword = password.getText().toString();
 
-                //TODO check if username exists in database
+                //TODO check if _username exists in database
                 //if user not found
                 //Toast.makeText(getApplicationContext(), "Invalid User",Toast.LENGTH_SHORT).show();
-                String storedPassword = ""; //TODO get password from database
+                String storedPassword = ""; //TODO get _password from database
 
                 if(!storedPassword.equals(enteredPassword))
                     Toast.makeText(getApplicationContext(), "Wrong Credentials",Toast.LENGTH_SHORT).show();

@@ -2,14 +2,17 @@ package com.access.accessonandroid;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.hardware.camera2;
+//import android.hardware.camera2;
+import android.util.Log;
+import android.view.TextureView;
+
+import org.w3c.dom.Text;
 
 public class CameraPreview extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
@@ -18,10 +21,10 @@ public class CameraPreview extends AppCompatActivity {
 
         try {
             releaseCameraAndPreview();
-            mCamera = camera2.open(id);
-            qOpened = (mCamera != null);
+            //mCamera = camera2.open(id);
+            //qOpened = (mCamera != null);
         } catch (Exception e) {
-            Log.e(getString(R.string.app_name), "failed to open Camera");
+            Log.e(getString(R.string.app_name), "failed to open FrontFacingCameraScanner");
             e.printStackTrace();
         }
 
@@ -29,10 +32,10 @@ public class CameraPreview extends AppCompatActivity {
     }
 
     private void releaseCameraAndPreview() {
-        mPreview.setCamera(null);
-        if (mCamera != null) {
-            mCamera.release();
-            mCamera = null;
-        }
+        //mPreview.setCamera(null);
+        //if (mCamera != null) {
+           // mCamera.release();
+           // mCamera = null;
+        //}
     }
 }

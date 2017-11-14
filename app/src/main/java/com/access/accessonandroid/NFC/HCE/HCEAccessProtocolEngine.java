@@ -1,5 +1,7 @@
 package com.access.accessonandroid.NFC.HCE;
 
+import android.util.Log;
+
 import java.util.Arrays;
 
 /**
@@ -33,6 +35,7 @@ public class HCEAccessProtocolEngine implements IHCEProtocolEngine {
     public byte[] getResponse(byte[] request) {
         byte[] response = UNKNOWN_CMD_SW;
         if (isSelectAPDU(request)) {
+            Log.v("NFC", "Received Select ADPU");
             response = createIDResponse();
         }
         return response;
@@ -52,7 +55,7 @@ public class HCEAccessProtocolEngine implements IHCEProtocolEngine {
      * @return Response as a byte array
      */
     private byte[] createIDResponse() {
-        return ConcatArrays(SELECT_OK_SW, accessCard.getAccessID().getBytes());
+        return ConcatArrays(accessCard.GetAccessID().getBytes(), SELECT_OK_SW);
     }
 
     /**
