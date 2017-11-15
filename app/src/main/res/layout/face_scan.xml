@@ -27,7 +27,7 @@
             android:text="How to Use Authenticator
     Step 1. Point the front camera at your face and center your face in the screen.
     Step 2. Place your finger on the fingerprint scanner while keeping the camera pointed at your face.
-    Step 3. etc. " />
+    Step 3. Wait for emulation " />
     </FrameLayout>
     <!--we don't need to keep this if we're doing auto-capture-->
     <Button
