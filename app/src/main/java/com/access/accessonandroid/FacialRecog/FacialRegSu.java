@@ -130,7 +130,7 @@ public class FacialRegSu implements FacialRecog{
      * @param target
      * @return
      */
-    public boolean compareFaces(Image imageOnFile, Image target) {
+    private boolean compareFaces(Image imageOnFile, Image target) {
         // Initialize the Amazon Cognito credentials provider
         boolean isMatched = false;
 
@@ -241,6 +241,13 @@ public class FacialRegSu implements FacialRecog{
 
         Image result=new Image()
                 .withBytes(imageBytes);
+        return result;
+    }
+
+
+    public static Image makeImageFromByteBuffer(ByteBuffer inputBuffer) {
+        Image result = new Image()
+                .withBytes(inputBuffer);
         return result;
     }
 

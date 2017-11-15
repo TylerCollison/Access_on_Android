@@ -39,7 +39,7 @@ public interface FacialRecog {
      * @param target
      * @return Whether the face in imageOnFile matches the face in target
      */
-    public boolean compareFaces(Image imageOnFile, Image target);
+//    public boolean compareFaces(Image imageOnFile, Image target);
 
 
     /**
