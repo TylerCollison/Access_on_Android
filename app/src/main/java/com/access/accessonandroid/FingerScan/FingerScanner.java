@@ -43,7 +43,7 @@ public class FingerScanner {
 
 
         if (!keyguardManager.isKeyguardSecure()) {
-            Toast.makeText(context, "Lock screen must be secure", 5);
+            Toast.makeText(context, "Lock screen must be secure", Toast.LENGTH_LONG);
         }
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(context, "App must have permission to use finger scan", Toast.LENGTH_LONG);

@@ -23,7 +23,7 @@ public class EmployeeRecord implements IHCEAccessCard {
     private String _username;
     private String _password;
 
-    private String id = "access1234";
+    private String id = "";
 
     //Stores the singleton instance
     private static EmployeeRecord instance = null;

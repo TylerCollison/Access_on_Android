@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Access on Android</string>
     <string name="data_server_address">https://access-on-android-client.herokuapp.com/</string>
-    <string name="id_route">id</string>
+    <string name="id_route">getid</string>
 </resources>
