@@ -3,7 +3,7 @@ package com.access.accessonandroid.Data;
 import android.util.Log;
 
 import com.access.accessonandroid.NFC.HCE.IHCEAccessCard;
-import com.access.accessonandroid.Registration.UserAccess;
+import com.access.accessonandroid.UserRegistration.UserAccess;
 import com.access.accessonandroid.Network.AbstractNetworkCallback;
 import com.access.accessonandroid.Network.INetworkAdapter;
 import com.access.accessonandroid.Network.NetworkAdapter;

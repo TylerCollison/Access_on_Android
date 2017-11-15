@@ -1,4 +1,4 @@
-package com.access.accessonandroid.Registration;
+package com.access.accessonandroid.UserRegistration;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.access.accessonandroid.R;
 import com.access.accessonandroid.Data.EmployeeRecord;
-import com.access.accessonandroid.Registration.registration;
 
 public class passwordChange extends AppCompatActivity {
 
@@ -26,7 +25,7 @@ public class passwordChange extends AppCompatActivity {
                 EditText confirmTextBox = (EditText) findViewById(R.id.confirmNewpassword);
                 String enteredPassword = passwordTextBox.getText().toString();
                 String confirmedPassword = confirmTextBox.getText().toString();
-                EmployeeRecord userRecord = registration.getRecord();
+                EmployeeRecord userRecord = Registration.getRecord();
                 if (enteredPassword.equals(confirmedPassword)) {
                     userRecord.updateUserPassword(confirmedPassword);
                     Toast.makeText(getApplicationContext(), "Password changed",Toast.LENGTH_SHORT).show();

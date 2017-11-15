@@ -7,11 +7,10 @@ import android.content.Intent;
 import com.access.accessonandroid.FacialRecog.FacialRecogCallbackFuncObj;
 import com.access.accessonandroid.FacialRecog.FacialRegSu;
 import com.access.accessonandroid.FacialRecog.FacialRecog;
-import com.access.accessonandroid.Registration.Registration;
 import com.amazonaws.services.rekognition.model.Image;
 import com.access.accessonandroid.Camera.CameraActivity;
+import com.access.accessonandroid.UserRegistration.Registration;
 
-import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity {
