@@ -29,21 +29,20 @@ public class Registration extends AppCompatActivity {
                 EditText password = (EditText)findViewById(R.id.password);
                 String enteredUsername = username.getText().toString();
                 String enteredPassword = password.getText().toString();
-//                userRecord = EmployeeRecord.getInstance();
-//                if(userRecord.isUser(enteredUsername)){
-//                    correctUsername = enteredUsername;
-//                    String storedPassword = userRecord.getUserPassword();
-//                    if(!storedPassword.equals(enteredPassword))
-//                        Toast.makeText(getApplicationContext(), "Wrong Credentials",Toast.LENGTH_SHORT).show();
-//                    else {
-//                        startActivity(new Intent(Registration.this, passwordChange.class));
-//                        userRecord.SetCredentials(correctUsername, enteredPassword);
-//                        finish();
-//                    }
-//                }
-//                else {
-//                    Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
-//                }
+                userRecord = EmployeeRecord.getInstance();
+                if(userRecord.isUser(enteredUsername)){
+                    correctUsername = enteredUsername;
+                    String storedPassword = userRecord.getUserPassword();
+                    if(!storedPassword.equals(enteredPassword))
+                        Toast.makeText(getApplicationContext(), "Wrong Credentials",Toast.LENGTH_SHORT).show();
+                    else {
+                        userRecord.SetCredentials(correctUsername, enteredPassword);
+                        finish();
+                    }
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

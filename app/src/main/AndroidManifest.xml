@@ -30,8 +30,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="UserRegistration.Registration" />
-        <activity android:name="UserRegistration.passwordChange" />
+        <activity android:name=".UserRegistration.Registration" />
+        <activity android:name=".UserRegistration.passwordChange" />
 
         <!-- <activity android:name=".Registration"></activity>
         <uses-permission android:name="android.permission.CAMERA" />
