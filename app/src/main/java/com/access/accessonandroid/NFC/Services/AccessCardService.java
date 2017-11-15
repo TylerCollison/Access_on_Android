@@ -6,7 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.access.accessonandroid.Authenticator;
 import com.access.accessonandroid.Data.EmployeeRecord;
+import com.access.accessonandroid.Emulator;
 import com.access.accessonandroid.FingerScan.FingerScanThread;
 import com.access.accessonandroid.FingerScan.FingerScanner;
 import com.access.accessonandroid.NFC.HCE.HCEAccessProtocolEngine;
@@ -59,7 +61,7 @@ public class AccessCardService extends HostApduService  {
             }
 
             //Finger scanning component
-            FingerScanner fingerScanner = new FingerScanner(context);
+           /* FingerScanner fingerScanner = new FingerScanner(context);
 
             //finger scanner runnable repeatedly runs until there is a match
             Runnable fingerRunner = new FingerScanThread(fingerScanner);
@@ -68,11 +70,12 @@ public class AccessCardService extends HostApduService  {
             //Spin lock
             while(fingerScanner.getMatch()) {
                 Log.v("NFC", "Waiting for fingerprint match");
-            }
-
+            }*/
+            new Emulator(context).run();
             //Send response
             Log.v("NFC", "Transmitting NFC message");
             transmitter.sendResponseApdu(command);
+
 
             return null;
         }
