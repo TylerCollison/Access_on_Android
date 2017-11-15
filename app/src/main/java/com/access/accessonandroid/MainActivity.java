@@ -32,10 +32,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        startActivity(new Intent(MainActivity.this, CameraActivity.class));
+        startActivity(new Intent(MainActivity.this, Registration.class));
+        startActivity(new Intent(MainActivity.this, CameraActivity.class));
         //maybe this will all be abstracted away from here later
 //        setContentView(R.layout.activity_main);
-//        startActivity(new Intent(MainActivity.this, Registration.class));
+
 
         //code to run authenticator class which will authenticate the user
 //        Authenticator authenticator = new Authenticator();
