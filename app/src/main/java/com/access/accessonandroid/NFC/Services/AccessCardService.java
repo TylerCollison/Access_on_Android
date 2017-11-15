@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.access.accessonandroid.Data.EmployeeRecord;
+import com.access.accessonandroid.FingerScan.FingerScanThread;
 import com.access.accessonandroid.FingerScan.FingerScanner;
 import com.access.accessonandroid.NFC.HCE.HCEAccessProtocolEngine;
+import com.access.accessonandroid.NFC.HCE.HCECommand;
 import com.access.accessonandroid.NFC.HCE.IHCEProtocolEngine;
 import com.access.accessonandroid.Network.INetworkCallback;
 import com.access.accessonandroid.Network.NetworkOperation.INetworkOperation;
+import com.access.accessonandroid.R;
 
 import java.io.IOException;
 
@@ -26,15 +29,14 @@ public class AccessCardService extends HostApduService  {
 
     private static IHCEProtocolEngine protocolEngine =
             new HCEAccessProtocolEngine(EmployeeRecord.getInstance());
-    private static ProtectedADPUMessage message;
+    private ProtectedADPUMessage message = new ProtectedADPUMessage();
 
     @Override
     public byte[] processCommandApdu(byte[] commandApdu, Bundle extras) {
-//        if (message == null) {
-//            message = new ProtectedADPUMessage();
-//            message.execute(this, protocolEngine.getResponse(commandApdu), getApplicationContext());
-//        }
-        return protocolEngine.getResponse(commandApdu);
+        message.cancel(true);
+        message = new ProtectedADPUMessage();
+        message.execute(this, protocolEngine.getResponse(commandApdu), getApplicationContext());
+        return null;
     }
 
     @Override
@@ -47,16 +49,30 @@ public class AccessCardService extends HostApduService  {
             byte[] command = (byte[])objects[1];
             Context context = (Context)objects[2];
 
+            //Update the access id
+            try {
+                EmployeeRecord.getInstance().RefreshAccessIDFromServer(
+                        context.getString(R.string.data_server_address) +
+                                context.getString(R.string.id_route));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             //Finger scanning component
             FingerScanner fingerScanner = new FingerScanner(context);
-            fingerScanner.scanFinger();
+
+            //finger scanner runnable repeatedly runs until there is a match
+            Runnable fingerRunner = new FingerScanThread(fingerScanner);
+            new Thread(fingerRunner).start();
 
             //Spin lock
-            while(!fingerScanner.getMatch()) {}
+            while(fingerScanner.getMatch()) {
+                Log.v("NFC", "Waiting for fingerprint match");
+            }
 
+            //Send response
+            Log.v("NFC", "Transmitting NFC message");
             transmitter.sendResponseApdu(command);
-
-            message = null;
 
             return null;
         }

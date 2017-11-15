@@ -24,6 +24,8 @@ public class HCEAccessProtocolEngine implements IHCEProtocolEngine {
     private static final byte[] SELECT_OK_SW = HexStringToByteArray("9000");
     // "UNKNOWN" status word sent in response to invalid APDU command (0x0000)
     private static final byte[] UNKNOWN_CMD_SW = HexStringToByteArray("0000");
+    // "UNKNOWN" status word sent in response to invalid APDU command (0x0000)
+    private static final byte[] WAIT_CMD_SW = HexStringToByteArray("5000");
     // Create the APDU Select command by merging the select header and AID
     private static final byte[] SELECT_APDU = BuildSelectApdu(ACCESS_CONTROL_AID);
 
@@ -39,6 +41,19 @@ public class HCEAccessProtocolEngine implements IHCEProtocolEngine {
             response = createIDResponse();
         }
         return response;
+    }
+
+    @Override
+    public byte[] getCommandCode(HCECommand command) {
+        byte[] result = new byte[0];
+
+        switch (command) {
+            case Wait:
+                result = WAIT_CMD_SW;
+                break;
+        }
+
+        return result;
     }
 
     /**

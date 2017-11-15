@@ -8,4 +8,5 @@ package com.access.accessonandroid.NFC.HCE;
  */
 public interface IHCEProtocolEngine {
     byte[] getResponse(byte[] request);
+    byte[] getCommandCode(HCECommand command);
 }
