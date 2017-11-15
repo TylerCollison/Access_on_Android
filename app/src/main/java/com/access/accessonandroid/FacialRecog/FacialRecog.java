@@ -31,25 +31,14 @@ public interface FacialRecog {
     public boolean compareFacesWithCallbackFunc(final Image imageOnFile, final Image target, final FacialRecogCallbackFuncObj callbackFunc);
 
 
-    /**
-     * Given two images, report whether they match with a SIMILARITY_THREASHOLD certainty.
-     * Contains network operation so cannot be called by the main thread.
-     *
-     * @param imageOnFile
-     * @param target
-     * @return Whether the face in imageOnFile matches the face in target
-     */
-    public boolean compareFaces(Image imageOnFile, Image target);
-
 
     /**
-     * Create a new thread before asking AWS Rekognition to comparefaces. Do not use unless absolutely necessary.
+     * Create a new thread before asking AWS Rekognition to comparefaces.
      * @param imageOnFile
      * @param target
      * @return Whether the face in imageOnFile matches the face in target
      */
     public boolean compareFacesThreadedBlocking(final Image imageOnFile, final Image target);
-
 
 
 
@@ -61,6 +50,20 @@ public interface FacialRecog {
     public int detectFaces(Image pic);
 
 
+
+    /**
+     * Do not use unless absolutely necessary!!!
+     * Do not use unless absolutely necessary!!!
+     * Do not use unless absolutely necessary!!!
+     *
+     * Given two images, report whether they match with a SIMILARITY_THREASHOLD certainty.
+     * Contains network operation so cannot be called by the main thread.
+     *
+     * @param imageOnFile
+     * @param target
+     * @return Whether the face in imageOnFile matches the face in target
+     */
+    public boolean compareFaces(Image imageOnFile, Image target);
 
 
 
