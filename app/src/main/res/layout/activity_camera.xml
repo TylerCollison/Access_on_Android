@@ -18,14 +18,12 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <Button
-        android:id="@+id/captureButton"
+    <ImageButton
+        android:id="@+id/cameraImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Capture"
-        tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="465dp" />
+        app:srcCompat="@mipmap/btn_camera"
+        tools:layout_editor_absoluteX="156dp"
+        tools:layout_editor_absoluteY="443dp" />
 
 </RelativeLayout>
