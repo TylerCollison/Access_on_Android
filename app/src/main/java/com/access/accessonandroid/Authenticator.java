@@ -2,6 +2,7 @@ package com.access.accessonandroid;
 
 import android.content.Context;
 
+import com.access.accessonandroid.FacialRecog.FacialRecogRunnable;
 import com.access.accessonandroid.FingerScan.FingerScanThread;
 import com.access.accessonandroid.FingerScan.FingerScanner;
 
@@ -12,11 +13,24 @@ import com.access.accessonandroid.FingerScan.FingerScanner;
 public class Authenticator {
     //
     public static void auth(Context context){
+
         //Finger scanning component
         FingerScanner fingerScanner = new FingerScanner(context);
-        fingerScanner.scanFinger();
         //finger scanner runnable repeatedly runs until there is a match
         Runnable fingerRunner = new FingerScanThread(fingerScanner);
-        new Thread(fingerRunner).start();
+        Thread fingerthread = new Thread(fingerRunner);
+        fingerthread.start();
+
+        //create runnable for facial scan I would like to be this easy
+        //Runnable faceRunner = new FacialRecogRunnable();
+        //Thread facethread = new Thread(faceRunner);
+        // facethread.start();
+
+        try {
+            fingerthread.join();
+            //facethread.join()
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
     }
 }

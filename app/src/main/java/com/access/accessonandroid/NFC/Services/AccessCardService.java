@@ -6,7 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.access.accessonandroid.Authenticator;
 import com.access.accessonandroid.Data.EmployeeRecord;
+import com.access.accessonandroid.Emulator;
 import com.access.accessonandroid.FingerScan.FingerScanThread;
 import com.access.accessonandroid.FingerScan.FingerScanner;
 import com.access.accessonandroid.NFC.HCE.HCEAccessProtocolEngine;
@@ -45,9 +47,9 @@ public class AccessCardService extends HostApduService  {
     private static class ProtectedADPUMessage extends AsyncTask<Object, Object, Object> {
         @Override
         protected Object doInBackground(Object[] objects) {
-            HostApduService transmitter = (HostApduService) objects[0];
-            byte[] command = (byte[])objects[1];
-            Context context = (Context)objects[2];
+            final HostApduService transmitter = (HostApduService) objects[0];
+            final byte[] command = (byte[])objects[1];
+            final Context context = (Context)objects[2];
 
             //Update the access id
             try {
@@ -59,7 +61,7 @@ public class AccessCardService extends HostApduService  {
             }
 
             //Finger scanning component
-            FingerScanner fingerScanner = new FingerScanner(context);
+           /* FingerScanner fingerScanner = new FingerScanner(context);
 
             //finger scanner runnable repeatedly runs until there is a match
             Runnable fingerRunner = new FingerScanThread(fingerScanner);
@@ -69,12 +71,18 @@ public class AccessCardService extends HostApduService  {
             //Spin lock
             while(fingerScanner.getMatch()) {
                 Log.v("NFC", "Waiting for fingerprint match");
-            }
+            }*/
+            Runnable emulator = new Runnable() {
+                @Override
+                public void run() {
+                    Authenticator.auth(context);
 
-            //Send response
-            Log.v("NFC", "Transmitting NFC message");
-            transmitter.sendResponseApdu(command);
-
+                    //Send response
+                    Log.v("NFC", "Transmitting NFC message");
+                    transmitter.sendResponseApdu(command);
+                }
+            };
+            emulator.run();
             return null;
         }
     }

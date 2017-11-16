@@ -245,6 +245,13 @@ public class FacialRegSu implements FacialRecog{
     }
 
 
+    public static Image makeImageFromByteBuffer(ByteBuffer inputBuffer) {
+        Image result = new Image()
+                .withBytes(inputBuffer);
+        return result;
+    }
+
+
 
     public static Image makeImageFromS3File (String fileName, String bucketName) {
         Image result = new Image().withS3Object(new S3Object()         // WHY does this work!?

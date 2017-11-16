@@ -3,6 +3,7 @@ package com.access.accessonandroid.Data;
 import android.util.Log;
 
 import com.access.accessonandroid.NFC.HCE.IHCEAccessCard;
+import com.access.accessonandroid.UserRegistration.UserAccess;
 import com.access.accessonandroid.Network.AbstractNetworkCallback;
 import com.access.accessonandroid.Network.INetworkAdapter;
 import com.access.accessonandroid.Network.NetworkAdapter;
@@ -18,7 +19,7 @@ import java.io.IOException;
  *
  * Created by Tyler Collison on 10/24/2017.
  */
-public class EmployeeRecord implements IHCEAccessCard {
+public class EmployeeRecord implements IHCEAccessCard, UserAccess{
 
     private String _username;
     private String _password;
@@ -58,5 +59,17 @@ public class EmployeeRecord implements IHCEAccessCard {
                 Log.v("EmployeeRecord", "EmployeeID: " + id);
             }
         });
+    }
+
+    public Boolean isUser(String username){
+        return true;
+    }
+
+    public void updateUserPassword(String password){
+
+    }
+
+    public String getUserPassword(){
+        return "";
     }
 }
