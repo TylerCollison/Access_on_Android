@@ -70,6 +70,6 @@ public class EmployeeRecord implements IHCEAccessCard, UserAccess{
     }
 
     public String getUserPassword(){
-        return "";
+        return "password1234";
     }
 }

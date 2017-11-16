@@ -8,6 +8,8 @@ import android.os.CancellationSignal;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
+import com.access.accessonandroid.Authenticator;
+
 /**
  * Created by danie_000 on 10/24/2017.
  */
@@ -43,11 +45,13 @@ public class FingerScanHandler extends FingerprintManager.AuthenticationCallback
     }
     @Override
     public void onAuthenticationFailed(){
-        Toast.makeText(context, "Auth Failed",Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Finger Auth Failed",Toast.LENGTH_LONG).show();
     }
     @Override
     public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result){
-        Toast.makeText(context, "Auth Success!",Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Finger Auth Success!",Toast.LENGTH_LONG).show();
         scanner.matched();
+        Authenticator.fingerAuth = true;
+        Authenticator.totalAuth =Authenticator.fingerAuth;//until face scan is working
     }
 }

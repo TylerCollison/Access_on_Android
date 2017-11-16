@@ -1,6 +1,7 @@
 package com.access.accessonandroid.FingerScan;
 
 import android.os.Looper;
+import android.util.Log;
 
 /**
  * Created by danie_000 on 10/26/2017.
@@ -17,10 +18,11 @@ public class FingerScanThread implements Runnable {
     //there is a while loop that scans until the finger is matched
     @Override
     public void run() {
-        Looper.prepare();
+        //Looper.prepare();
 
         fingerScanner.scanFinger();
         while(!fingerScanner.getMatch()){
+            Log.v("test","Scanner Running");
             fingerScanner.scanFinger();
             try{
                 Thread.sleep(5000);
@@ -29,6 +31,6 @@ public class FingerScanThread implements Runnable {
             }
         }
 
-        Looper.loop();
+        //Looper.loop();
     }
 }

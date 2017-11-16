@@ -3,12 +3,15 @@ package com.access.accessonandroid.FingerScan;
 import android.Manifest;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
+
+import com.access.accessonandroid.Camera.CameraActivity;
 
 import java.security.KeyStore;
 
@@ -41,7 +44,6 @@ public class FingerScanner {
         keyguardManager = (KeyguardManager) context.getSystemService(KEYGUARD_SERVICE);
         fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
 
-
         if (!keyguardManager.isKeyguardSecure()) {
             Toast.makeText(context, "Lock screen must be secure", Toast.LENGTH_LONG);
         }
@@ -63,6 +65,7 @@ public class FingerScanner {
 
     public void matched(){
         match = true;
+        context.startActivity(new Intent(context, CameraActivity.class));
     }
     public boolean getMatch(){
         return match;

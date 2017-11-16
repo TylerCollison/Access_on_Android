@@ -60,28 +60,14 @@ public class AccessCardService extends HostApduService  {
                 e.printStackTrace();
             }
 
-            //Finger scanning component
-           /* FingerScanner fingerScanner = new FingerScanner(context);
-
-            //finger scanner runnable repeatedly runs until there is a match
-            Runnable fingerRunner = new FingerScanThread(fingerScanner);
-            new Thread(fingerRunner).start();
-
-            //Spin lock
-            while(fingerScanner.getMatch()) {
-                Log.v("NFC", "Waiting for fingerprint match");
-            }*/
-            Runnable emulator = new Runnable() {
-                @Override
-                public void run() {
-                    Authenticator.auth(context);
-
-                    //Send response
-                    Log.v("NFC", "Transmitting NFC message");
-                    transmitter.sendResponseApdu(command);
-                }
-            };
-            emulator.run();
+            if(Authenticator.totalAuth) {
+                //Send response
+                Log.v("NFC", "Transmitting NFC message");
+                transmitter.sendResponseApdu(command);
+                Authenticator.reset();
+            }else{
+                //transmit wait signal/do not transmit
+            }
             return null;
         }
     }

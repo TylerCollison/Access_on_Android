@@ -1,19 +1,23 @@
 package com.access.accessonandroid;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
+import com.access.accessonandroid.Camera.CameraActivity;
 import com.access.accessonandroid.FacialRecog.FacialRecogRunnable;
 import com.access.accessonandroid.FingerScan.FingerScanThread;
 import com.access.accessonandroid.FingerScan.FingerScanner;
 
 /**
- * Implements Fingerprint scanning and facial recognition
+ * Fingerprint scanning and facial recognition
  */
 
 public class Authenticator {
-    //
-    public static void auth(Context context){
+    public static boolean faceAuth = false, fingerAuth=false, totalAuth = false;
 
+    public static void auth(Context context){
+        Log.v("test","Auth Started");
         //Finger scanning component
         FingerScanner fingerScanner = new FingerScanner(context);
         //finger scanner runnable repeatedly runs until there is a match
@@ -21,16 +25,10 @@ public class Authenticator {
         Thread fingerthread = new Thread(fingerRunner);
         fingerthread.start();
 
-        //create runnable for facial scan I would like to be this easy
-        //Runnable faceRunner = new FacialRecogRunnable();
-        //Thread facethread = new Thread(faceRunner);
-        // facethread.start();
+        Log.v("test","Auth Success");
+    }
 
-        try {
-            fingerthread.join();
-            //facethread.join()
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
+    public static void reset(){
+        faceAuth = false; fingerAuth=false; totalAuth = false;
     }
 }
