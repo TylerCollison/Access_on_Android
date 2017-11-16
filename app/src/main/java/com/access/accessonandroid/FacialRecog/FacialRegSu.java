@@ -8,6 +8,7 @@ package com.access.accessonandroid.FacialRecog;
 import android.content.Context;
 
 
+import com.access.accessonandroid.Data.AWSCognitoCredentialProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClient;
@@ -62,11 +63,18 @@ public class FacialRegSu implements FacialRecog{
 
         this.SIMILARITY_THRESHOLD = 70F;
         this.applicationContext = androidAppContext;                                        //        this.generalAwsCredential = awsCredential;
+
         this.generalAwsCredential = new CognitoCachingCredentialsProvider(      // @TODO Should move this out eventually
                 this.applicationContext,
                 "***scambled****", // Identity pool ID
                 Regions.US_EAST_1 // Region
         );
+
+//        if (AWSCognitoCredentialProvider.getInstance().GetProvider() == null) {     // If the Amazon AWS credential has not been initialized
+//            AWSCognitoCredentialProvider.getInstance().CreateProvider(androidAppContext);           // initialize Amazon AWS credential
+//        }
+//        this.generalAwsCredential = (CognitoCachingCredentialsProvider) AWSCognitoCredentialProvider.getInstance().GetProvider();   // store the Amazon AWS credential
+
     }
 //
 //    private class MyCallable implements Callable<Boolean> {
