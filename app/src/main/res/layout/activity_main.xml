@@ -17,4 +17,14 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="Authenticate" />
+
+    <Button
+        android:id="@+id/passwordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/authButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/authButton"
+        android:layout_marginBottom="65dp"
+        android:text="Change Password" />
 </RelativeLayout>

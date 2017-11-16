@@ -19,6 +19,7 @@ import com.access.accessonandroid.FingerScan.FingerScanThread;
 import com.access.accessonandroid.FingerScan.FingerScanner;
 import com.access.accessonandroid.NFC.Services.AccessCardService;
 import com.access.accessonandroid.UserRegistration.Registration;
+import com.access.accessonandroid.UserRegistration.passwordChange;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -43,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(mainContext, FingerScannerActivity.class));
+            }
+        });
+
+        Button chngPasswordButton = findViewById(R.id.passwordButton);
+        chngPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mainContext, passwordChange.class));
             }
         });
     }
