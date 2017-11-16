@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.access.accessonandroid.Data.EmployeeRecord;
+
 public class Registration extends AppCompatActivity {
 
     private Button signInButton;
@@ -15,13 +17,16 @@ public class Registration extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        final EditText username = (EditText)findViewById(R.id.username);
+        final EditText password = (EditText)findViewById(R.id.password);
         signInButton = (Button) findViewById(R.id.signInButton);
         signInButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){//On click of signInButton
-                EditText username = (EditText)findViewById(R.id.username);
-                EditText password = (EditText)findViewById(R.id.password);
                 String enteredUsername = username.getText().toString();
                 String enteredPassword = password.getText().toString();
+
+                //Set the credentials of the employee record
+                EmployeeRecord.getInstance().SetCredentials(enteredUsername, enteredPassword);
 
                 //TODO check if _username exists in database
                 //if user not found

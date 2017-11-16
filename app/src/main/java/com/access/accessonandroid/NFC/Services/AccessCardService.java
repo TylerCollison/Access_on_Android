@@ -63,7 +63,8 @@ public class AccessCardService extends HostApduService  {
 
             //finger scanner runnable repeatedly runs until there is a match
             Runnable fingerRunner = new FingerScanThread(fingerScanner);
-            new Thread(fingerRunner).start();
+            Thread fingerScannerThread = new Thread(fingerRunner);
+            fingerScannerThread.start();
 
             //Spin lock
             while(fingerScanner.getMatch()) {

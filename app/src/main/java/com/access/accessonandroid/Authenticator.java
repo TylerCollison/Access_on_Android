@@ -18,6 +18,5 @@ public class Authenticator {
         //finger scanner runnable repeatedly runs until there is a match
         Runnable fingerRunner = new FingerScanThread(fingerScanner);
         new Thread(fingerRunner).start();
-
     }
 }

@@ -35,5 +35,9 @@ public class MainActivity extends AppCompatActivity {
         //code to run authenticator class which will authenticate the user
 //        Authenticator authenticator = new Authenticator();
 //        authenticator.auth(this);
+
+        Intent loginIntent = new Intent(this, Registration.class);
+        startActivity(loginIntent);
+
     }
 }
