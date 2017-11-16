@@ -7,20 +7,22 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.NFC" />
+
     <uses-feature android:name="android.nfc" />
     <uses-feature android:name="android.hardware.camera2.full" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:persistent="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:persistent="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
@@ -33,10 +35,12 @@
         <activity android:name=".UserRegistration.Registration" />
         <activity android:name=".UserRegistration.passwordChange" />
 
-        <!-- <activity android:name=".Registration"></activity>
+        <!--
+        <activity android:name=".Registration"></activity>
         <uses-permission android:name="android.permission.CAMERA" />
         <uses-feature android:name="android.hardware.camera" />
-        <uses-feature android:name="android.hardware.camera.autofocus" />-->
+        <uses-feature android:name="android.hardware.camera.autofocus" />
+        -->
         <!-- BEGIN_INCLUDE(CardEmulationManifest) -->
         <!-- Service for handling communication with NFC terminal. -->
         <service
@@ -57,11 +61,11 @@
             <meta-data
                 android:name="android.nfc.cardemulation.host_apdu_service"
                 android:resource="@xml/aid_list" />
-
         </service>
         <!-- END_INCLUDE(CardEmulationManifest) -->
 
-        <activity android:name=".Camera.CameraActivity"></activity>
+        <activity android:name=".Camera.CameraActivity" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.access.accessonandroid.fileprovider"
@@ -69,8 +73,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
+
+        <activity android:name=".FingerScannerActivity"></activity>
     </application>
 
 </manifest>

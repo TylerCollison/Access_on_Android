@@ -49,6 +49,10 @@ public class EmployeeRecord implements IHCEAccessCard, UserAccess{
         _password = password;
     }
 
+    public boolean HasCredentials() {
+        return _username != null && _password != null;
+    }
+
     public void RefreshAccessIDFromServer(String serverAddress) throws IOException {
         INetworkOperation getIdRequest = new AuthenticatedRequest(_username, _password);
         INetworkAdapter adapter = new NetworkAdapter(serverAddress);
@@ -70,6 +74,6 @@ public class EmployeeRecord implements IHCEAccessCard, UserAccess{
     }
 
     public String getUserPassword(){
-        return "";
+        return "password1234";
     }
 }

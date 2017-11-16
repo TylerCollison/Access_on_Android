@@ -31,59 +31,19 @@ public class AccessCardService extends HostApduService  {
 
     private static IHCEProtocolEngine protocolEngine =
             new HCEAccessProtocolEngine(EmployeeRecord.getInstance());
-    private ProtectedADPUMessage message = new ProtectedADPUMessage();
 
     @Override
     public byte[] processCommandApdu(byte[] commandApdu, Bundle extras) {
-        message.cancel(true);
-        message = new ProtectedADPUMessage();
-        message.execute(this, protocolEngine.getResponse(commandApdu), getApplicationContext());
-        return null;
+        if (Authenticator.getInstance().getAuthenticated()) {
+            Authenticator.getInstance().invalidateAuthentication();
+            return protocolEngine.getResponse(commandApdu);
+        } else {
+            return protocolEngine.getCommandCode(HCECommand.Wait);
+        }
     }
 
     @Override
-    public void onDeactivated(int reason) {}
-
-    private static class ProtectedADPUMessage extends AsyncTask<Object, Object, Object> {
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            final HostApduService transmitter = (HostApduService) objects[0];
-            final byte[] command = (byte[])objects[1];
-            final Context context = (Context)objects[2];
-
-            //Update the access id
-            try {
-                EmployeeRecord.getInstance().RefreshAccessIDFromServer(
-                        context.getString(R.string.data_server_address) +
-                                context.getString(R.string.id_route));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            //Finger scanning component
-           /* FingerScanner fingerScanner = new FingerScanner(context);
-
-            //finger scanner runnable repeatedly runs until there is a match
-            Runnable fingerRunner = new FingerScanThread(fingerScanner);
-            Thread fingerScannerThread = new Thread(fingerRunner);
-            fingerScannerThread.start();
-
-            //Spin lock
-            while(fingerScanner.getMatch()) {
-                Log.v("NFC", "Waiting for fingerprint match");
-            }*/
-            Runnable emulator = new Runnable() {
-                @Override
-                public void run() {
-                    Authenticator.auth(context);
-
-                    //Send response
-                    Log.v("NFC", "Transmitting NFC message");
-                    transmitter.sendResponseApdu(command);
-                }
-            };
-            emulator.run();
-            return null;
-        }
+    public void onDeactivated(int reason) {
+        Authenticator.getInstance().invalidateAuthentication();
     }
 }

@@ -19,9 +19,11 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/captureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:text="Capture"
         tools:layout_editor_absoluteX="147dp"
         tools:layout_editor_absoluteY="465dp" />

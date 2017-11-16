@@ -30,13 +30,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //maybe this will all be abstracted away from here later
-//        setContentView(R.layout.activity_main);
-        startActivity(new Intent(MainActivity.this, Registration.class));
-        startActivity(new Intent(MainActivity.this, CameraActivity.class));
+        final Context mainContext = this;
 
-        //code to run authenticator class which will authenticate the user
-//        Authenticator authenticator = new Authenticator();
-//        authenticator.auth(this);
+        //Determine whether the employee record has credentials
+        if (!EmployeeRecord.getInstance().HasCredentials()) {
+            //Have user enter credentials
+            startActivity(new Intent(mainContext, Registration.class));
+        }
+
+        Button authButton = findViewById(R.id.authButton);
+        authButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mainContext, FingerScannerActivity.class));
+            }
+        });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Authenticator.getInstance().invalidateAuthentication();
     }
 }

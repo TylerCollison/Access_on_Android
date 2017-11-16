@@ -1,6 +1,7 @@
 package com.access.accessonandroid.Camera;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
@@ -25,8 +26,10 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.access.accessonandroid.Authenticator;
 import com.access.accessonandroid.R;
 
 import java.io.File;
@@ -119,7 +122,21 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        final Activity cameraContext = this;
+
         mTextureView = (TextureView) findViewById(R.id.textureView);
+
+        Button captureButton = findViewById(R.id.captureButton);
+        captureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: run facial recognition before authentication
+                //Authenticate the user
+                Authenticator.getInstance().authenticate();
+                //Close this camera activity
+                cameraContext.finish();
+            }
+        });
     }
 
     @Override

@@ -17,8 +17,6 @@ public class FingerScanThread implements Runnable {
     //there is a while loop that scans until the finger is matched
     @Override
     public void run() {
-        Looper.prepare();
-
         fingerScanner.scanFinger();
         while(!fingerScanner.getMatch()){
             fingerScanner.scanFinger();
@@ -28,7 +26,5 @@ public class FingerScanThread implements Runnable {
                 e.printStackTrace();
             }
         }
-
-        Looper.loop();
     }
 }
