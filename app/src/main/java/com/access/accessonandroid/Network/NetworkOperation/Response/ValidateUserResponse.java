@@ -4,12 +4,13 @@ import com.access.accessonandroid.Network.NetworkOperation.INetworkOperation;
 import com.google.gson.Gson;
 
 /**
- * Created by Tyler Collison on 11/12/2017.
+ * Created by Tyler Collison on 11/15/2017.
  */
 
-public class GetIDResponse implements INetworkOperation {
+public class ValidateUserResponse implements INetworkOperation {
 
-    public String id;
+    public boolean username_is_valid;
+    public boolean password_is_valid;
 
     @Override
     public String toJsonString() {
@@ -20,7 +21,8 @@ public class GetIDResponse implements INetworkOperation {
     @Override
     public void populateFromJsonString(String jsonString) {
         Gson gson = new Gson();
-        GetIDResponse req = gson.fromJson(jsonString, this.getClass());
-        id = req.id;
+        ValidateUserResponse req = gson.fromJson(jsonString, this.getClass());
+        username_is_valid = req.username_is_valid;
+        password_is_valid = req.password_is_valid;
     }
 }

@@ -3,11 +3,12 @@ package com.access.accessonandroid.Data;
 import android.util.Log;
 
 import com.access.accessonandroid.NFC.HCE.IHCEAccessCard;
+import com.access.accessonandroid.UserRegistration.UserAccess;
 import com.access.accessonandroid.Network.AbstractNetworkCallback;
 import com.access.accessonandroid.Network.INetworkAdapter;
 import com.access.accessonandroid.Network.NetworkAdapter;
 import com.access.accessonandroid.Network.NetworkOperation.INetworkOperation;
-import com.access.accessonandroid.Network.NetworkOperation.Request.GetIDRequest;
+import com.access.accessonandroid.Network.NetworkOperation.Request.AuthenticatedRequest;
 import com.access.accessonandroid.Network.NetworkOperation.Response.GetIDResponse;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.io.IOException;
  *
  * Created by Tyler Collison on 10/24/2017.
  */
-public class EmployeeRecord implements IHCEAccessCard {
+public class EmployeeRecord implements IHCEAccessCard, UserAccess{
 
     private String _username;
     private String _password;
@@ -49,7 +50,7 @@ public class EmployeeRecord implements IHCEAccessCard {
     }
 
     public void RefreshAccessIDFromServer(String serverAddress) throws IOException {
-        INetworkOperation getIdRequest = new GetIDRequest(_username, _password);
+        INetworkOperation getIdRequest = new AuthenticatedRequest(_username, _password);
         INetworkAdapter adapter = new NetworkAdapter(serverAddress);
         adapter.postToServer(getIdRequest, new AbstractNetworkCallback<GetIDResponse>(new GetIDResponse()) {
             @Override
@@ -58,5 +59,17 @@ public class EmployeeRecord implements IHCEAccessCard {
                 Log.v("EmployeeRecord", "EmployeeID: " + id);
             }
         });
+    }
+
+    public Boolean isUser(String username){
+        return true;
+    }
+
+    public void updateUserPassword(String password){
+
+    }
+
+    public String getUserPassword(){
+        return "";
     }
 }
