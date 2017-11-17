@@ -12,7 +12,7 @@ import com.amazonaws.regions.Regions;
 
 public class AWSCognitoCredentialProvider implements ICredentialProvider {
 
-    private static final String IDENTITY_POOL_ID = "us-east-2:0f555d1a-d025-4f53-ba52-2e5a4b4d0f6f";
+    private static final String IDENTITY_POOL_ID = "us-east-2:180a446f-81c6-4ed4-aea2-dfc6a3bcd2fe";
 
     private static ICredentialProvider instance;
     public static ICredentialProvider getInstance() {

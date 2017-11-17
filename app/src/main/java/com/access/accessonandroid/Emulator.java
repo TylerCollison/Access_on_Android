@@ -13,7 +13,7 @@ public class Emulator implements Runnable {
     }
     @Override
     public void run(){
-        Authenticator.auth(contxt);
+        //Authenticator.auth(contxt);
         //Authenticator will hang until authentication is complete
         //no true or false is needed
 
