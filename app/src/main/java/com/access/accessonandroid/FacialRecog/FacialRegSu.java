@@ -64,7 +64,7 @@ public class FacialRegSu implements FacialRecog{
         this.applicationContext = androidAppContext;                                        //        this.generalAwsCredential = awsCredential;
         this.generalAwsCredential = new CognitoCachingCredentialsProvider(      // @TODO Should move this out eventually
                 this.applicationContext,
-                "***scambled****", // Identity pool ID
+                "us-east-1:06e29e47-16cb-4d97-a6cc-cc9f5d774691", // Identity pool ID
                 Regions.US_EAST_1 // Region
         );
     }

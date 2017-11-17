@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.access.accessonandroid.R;
 import com.access.accessonandroid.FacialRecog.FacialRecog;
+import com.access.accessonandroid.FacialRecog.FacialRegSu;
 
 import java.io.File;
 import java.io.IOException;
@@ -126,12 +127,29 @@ public class CameraActivity extends AppCompatActivity {
         @Override
         public void run() {
             ByteBuffer byteBuffer = mImage.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[byteBuffer.remaining()];
-            byteBuffer.get(bytes);
 
             //TODO: Call Mike's facial recognition
-            for (byte b : bytes) {
-                Log.i("CameraActivity", String.format("0x%20x", b));
+            //Captured from device
+
+            com.amazonaws.services.rekognition.model.Image imageFromDevice = FacialRegSu.makeImageFromByteBuffer(byteBuffer);
+            //com.amazonaws.services.rekognition.model.Image imageFromDevice = FacialRegSu.makeImageFromS3File("will_match.jpg", "infosecurity");
+            com.amazonaws.services.rekognition.model.Image imageOnServer = FacialRegSu.makeImageFromS3File("my_face_sample.jpg", "infosecurity");
+            FacialRecog recog = new FacialRegSu(getApplicationContext());
+            boolean isMatch = false;
+            try {
+                isMatch = recog.compareFaces(imageFromDevice, imageOnServer);
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "Error with facial recognition. Try again!", Toast.LENGTH_SHORT).show();
+                Log.i("CameraActivity", "Caught error");
+                e.printStackTrace();
+            }
+            mImage.close();
+            if (isMatch) {
+                Log.i("CameraActivity", "It's a match!");
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Facial recognition failed.", Toast.LENGTH_SHORT).show();
+                Log.i("CameraActivity", "It's not a match :(");
             }
         }
     }
@@ -144,11 +162,6 @@ public class CameraActivity extends AppCompatActivity {
                             break;
                         case STATE_WAIT_LOCK:
                             mCaptureState = STATE_PREVIEW;
-//                            Integer afState = captureResult.get(CaptureResult.CONTROL_AF_STATE);
-//                            if (afState == CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED ||
-//                                    afState == CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED) {
-//                                Toast.makeText(getApplicationContext(), "Autofocus locked!", Toast.LENGTH_SHORT).show();
-//                            }
                             startStillCaptureRequest();
                             break;
                     }
@@ -262,8 +275,8 @@ public class CameraActivity extends AppCompatActivity {
                     rotatedHeight = width;
                 }
                 mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
-                mImageSize = chooseOptimalSize(map.getOutputSizes(ImageFormat.YUV_420_888), rotatedWidth, rotatedHeight);
-                mImageReader = ImageReader.newInstance(mImageSize.getWidth(), mImageSize.getHeight(), ImageFormat.YUV_420_888, 10);
+                mImageSize = chooseOptimalSize(map.getOutputSizes(ImageFormat.JPEG), rotatedWidth, rotatedHeight);
+                mImageReader = ImageReader.newInstance(mImageSize.getWidth(), mImageSize.getHeight(), ImageFormat.JPEG, 10);
                 mImageReader.setOnImageAvailableListener(mOnImageAvailableListener, mBackgroundHandler);
                 mCameraId = cameraId;
                 return;
