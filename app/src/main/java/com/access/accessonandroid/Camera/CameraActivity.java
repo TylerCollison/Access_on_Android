@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.access.accessonandroid.Authenticator;
 import com.access.accessonandroid.R;
 import com.access.accessonandroid.FacialRecog.FacialRecog;
 import com.access.accessonandroid.FacialRecog.FacialRegSu;
@@ -146,6 +147,7 @@ public class CameraActivity extends AppCompatActivity {
             mImage.close();
             if (isMatch) {
                 Log.i("CameraActivity", "It's a match!");
+                Authenticator.getInstance().authenticate();
                 finish();
             } else {
                 Toast.makeText(getApplicationContext(), "Facial recognition failed.", Toast.LENGTH_SHORT).show();

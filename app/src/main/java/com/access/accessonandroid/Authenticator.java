@@ -32,7 +32,7 @@ public class Authenticator {
     private boolean isAuthenticated = false;
 
     private boolean requiresFingerprint = true;
-    private boolean requiresFacialRecognition = false;
+    private boolean requiresFacialRecognition = true;
 
     public boolean getAuthenticated() {
         return isAuthenticated;
