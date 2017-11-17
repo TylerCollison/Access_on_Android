@@ -64,16 +64,16 @@ public class FacialRegSu implements FacialRecog{
         this.SIMILARITY_THRESHOLD = 70F;
         this.applicationContext = androidAppContext;                                        //        this.generalAwsCredential = awsCredential;
 
-//        this.generalAwsCredential = new CognitoCachingCredentialsProvider(      // @TODO Should move this out eventually
-//                this.applicationContext,
-//                "us-east-1:06e29e47-16cb-4d97-a6cc-cc9f5d774691", // Identity pool ID
-//                Regions.US_EAST_1 // Region
-//        );
+        this.generalAwsCredential = new CognitoCachingCredentialsProvider(      // @TODO Should move this out eventually
+                this.applicationContext,
+                "us-east-1:06e29e47-16cb-4d97-a6cc-cc9f5d774691", // Identity pool ID
+                Regions.US_EAST_1 // Region
+        );
 
-        if (AWSCognitoCredentialProvider.getInstance().GetProvider() == null) {     // If the Amazon AWS credential has not been initialized
-            AWSCognitoCredentialProvider.getInstance().CreateProvider(androidAppContext);           // initialize Amazon AWS credential
-        }
-        this.generalAwsCredential = (CognitoCachingCredentialsProvider) AWSCognitoCredentialProvider.getInstance().GetProvider();   // store the Amazon AWS credential
+//        if (AWSCognitoCredentialProvider.getInstance().GetProvider() == null) {     // If the Amazon AWS credential has not been initialized
+//            AWSCognitoCredentialProvider.getInstance().CreateProvider(androidAppContext);           // initialize Amazon AWS credential
+//        }
+//        this.generalAwsCredential = (CognitoCachingCredentialsProvider) AWSCognitoCredentialProvider.getInstance().GetProvider();   // store the Amazon AWS credential
 
         }
 //
