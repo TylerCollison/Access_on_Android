@@ -9,7 +9,10 @@ import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 /**
- * Created by danie_000 on 10/24/2017.
+ * Created by Daniel Bond on 10/24/2017.
+ * Adapted code from an online tutorial
+ *      http://www.techotopia.com/index.php/An_Android_Fingerprint_Authentication_Tutorial
+ * This is the code that catches result of each call to FingerScanner.scanFinger()
  */
 
 public class FingerScanHandler extends FingerprintManager.AuthenticationCallback {
@@ -23,11 +26,10 @@ public class FingerScanHandler extends FingerprintManager.AuthenticationCallback
     }
 
     public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject){
-
         cancellationSignal = new CancellationSignal();
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(context, "App must have permission to use finger scan", Toast.LENGTH_LONG);
+            Toast.makeText(context, "App must have permission to use finger scan", Toast.LENGTH_LONG).show();
             return;
         }
         manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
@@ -48,6 +50,6 @@ public class FingerScanHandler extends FingerprintManager.AuthenticationCallback
     @Override
     public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result){
         Toast.makeText(context, "Auth Success!",Toast.LENGTH_LONG).show();
-        scanner.matched();
+        scanner.matched();// once matched the scanner flag is switched to true
     }
 }

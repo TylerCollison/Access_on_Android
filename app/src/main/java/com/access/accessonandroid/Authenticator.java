@@ -1,18 +1,21 @@
 package com.access.accessonandroid;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import com.access.accessonandroid.Camera.CameraActivity;
-import com.access.accessonandroid.Data.EmployeeRecord;
-import com.access.accessonandroid.FacialRecog.FacialRecogRunnable;
 import com.access.accessonandroid.FingerScan.FingerScanThread;
 import com.access.accessonandroid.FingerScan.FingerScanner;
 
 /**
- * Implements Fingerprint scanning and facial recognition
+ * @author Daniel Bond
+ * @author Tyler Collison
+ *
+ * This is the class that uses both the Facial Recognition and Fingerprint scanning components
+ * to authenticate the user and keep track of authentication state.
+ *
+ * A singleton pattern is used so that we can access state throughout the application.
  */
 
 public class Authenticator {
@@ -68,14 +71,13 @@ public class Authenticator {
         //Finger scanning component
         FingerScanner fingerScanner = new FingerScanner(context);
 
-        //finger scanner runnable repeatedly runs until there is a match
+        //finger scanner runnable runs until there is a match
         Runnable fingerRunner = new FingerScanThread(fingerScanner);
         Thread fingerthread = new Thread(fingerRunner);
         fingerthread.start();
 
         try {
             fingerthread.join();
-            //facethread.join()
         }catch (InterruptedException e){
             e.printStackTrace();
         }

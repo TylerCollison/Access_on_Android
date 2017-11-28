@@ -1,17 +1,12 @@
 package com.access.accessonandroid;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.nfc.cardemulation.HostApduService;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.access.accessonandroid.Data.EmployeeRecord;
-import com.access.accessonandroid.FingerScan.FingerScanThread;
-import com.access.accessonandroid.FingerScan.FingerScanner;
 
 import java.io.IOException;
 

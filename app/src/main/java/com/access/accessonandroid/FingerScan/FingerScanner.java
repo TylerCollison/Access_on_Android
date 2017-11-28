@@ -19,7 +19,14 @@ import javax.crypto.SecretKey;
 import static android.content.Context.KEYGUARD_SERVICE;
 
 /**
- * Created by danie_000 on 10/24/2017.
+ * Created by Daniel Bond on 10/24/2017.
+ * Adapted code from an online tutorial
+ *      http://www.techotopia.com/index.php/An_Android_Fingerprint_Authentication_Tutorial
+ *
+ *  This class is needed to scan fingerprints.
+ *  A digital representation of a fingerprint is stored in the crypoObject.
+ *  The FingerScanHandler helper uses this object and the FingerprintManager from the operating
+ *  system to determine the correct outcome.
  */
 
 public class FingerScanner {
@@ -37,19 +44,18 @@ public class FingerScanner {
         context = c;
     }
 
-    public boolean scanFinger() {
+    public void scanFinger() {
         keyguardManager = (KeyguardManager) context.getSystemService(KEYGUARD_SERVICE);
         fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
 
-
         if (!keyguardManager.isKeyguardSecure()) {
-            Toast.makeText(context, "Lock screen must be secure", Toast.LENGTH_LONG);
+            Toast.makeText(context, "Lock screen must be secure", Toast.LENGTH_LONG).show();
         }
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(context, "App must have permission to use finger scan", Toast.LENGTH_LONG);
+            Toast.makeText(context, "App must have permission to use finger scanner", Toast.LENGTH_LONG).show();
         }
         if (!fingerprintManager.hasEnrolledFingerprints()) {
-            Toast.makeText(context, "There must be at least one enrolled fingerprint", Toast.LENGTH_LONG);
+            Toast.makeText(context, "There must be at least one enrolled fingerprint", Toast.LENGTH_LONG).show();
         }
         generateKey();
         if(cipherInit()){
@@ -57,13 +63,18 @@ public class FingerScanner {
             FingerScanHandler helper  = new FingerScanHandler(context, this );
             helper.startAuth(fingerprintManager, cryptoObject);
         }
-
-        return match;
     }
 
+    /**
+     * Once the Fingerprint is matched then this can be called to set the matched value to true
+     */
     public void matched(){
         match = true;
     }
+
+    /**
+     * This method is called to check if this fingerscanner object has found a matched fingerprint
+     */
     public boolean getMatch(){
         return match;
     }
