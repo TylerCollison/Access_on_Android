@@ -1,10 +1,10 @@
 package com.access.accessonandroid.FingerScan;
 
-import android.os.Looper;
-
 /**
- * Created by danie_000 on 10/26/2017.
- * Thread for running the finger scanner until success
+ * Created by Daniel Bond on 10/26/2017.
+ * This is a runnable which will run until the fingerscanner finds a match
+ * There is a five second wait between scans to avoid issues with phone hardware
+ * Works with FingerScanner and FingerScanHandler
  */
 
 public class FingerScanThread implements Runnable {
@@ -17,8 +17,6 @@ public class FingerScanThread implements Runnable {
     //there is a while loop that scans until the finger is matched
     @Override
     public void run() {
-        Looper.prepare();
-
         fingerScanner.scanFinger();
         while(!fingerScanner.getMatch()){
             fingerScanner.scanFinger();
@@ -28,7 +26,5 @@ public class FingerScanThread implements Runnable {
                 e.printStackTrace();
             }
         }
-
-        Looper.loop();
     }
 }

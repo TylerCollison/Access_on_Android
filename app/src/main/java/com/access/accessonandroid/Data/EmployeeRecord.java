@@ -8,7 +8,7 @@ import com.access.accessonandroid.Network.AbstractNetworkCallback;
 import com.access.accessonandroid.Network.INetworkAdapter;
 import com.access.accessonandroid.Network.NetworkAdapter;
 import com.access.accessonandroid.Network.NetworkOperation.INetworkOperation;
-import com.access.accessonandroid.Network.NetworkOperation.Request.GetIDRequest;
+import com.access.accessonandroid.Network.NetworkOperation.Request.AuthenticatedRequest;
 import com.access.accessonandroid.Network.NetworkOperation.Response.GetIDResponse;
 
 import java.io.IOException;
@@ -49,8 +49,12 @@ public class EmployeeRecord implements IHCEAccessCard, UserAccess{
         _password = password;
     }
 
+    public boolean HasCredentials() {
+        return _username != null && _password != null;
+    }
+
     public void RefreshAccessIDFromServer(String serverAddress) throws IOException {
-        INetworkOperation getIdRequest = new GetIDRequest(_username, _password);
+        INetworkOperation getIdRequest = new AuthenticatedRequest(_username, _password);
         INetworkAdapter adapter = new NetworkAdapter(serverAddress);
         adapter.postToServer(getIdRequest, new AbstractNetworkCallback<GetIDResponse>(new GetIDResponse()) {
             @Override
@@ -70,6 +74,6 @@ public class EmployeeRecord implements IHCEAccessCard, UserAccess{
     }
 
     public String getUserPassword(){
-        return "";
+        return "password1234";
     }
 }
