@@ -2,6 +2,7 @@ package com.access.accessonandroid.FacialRecog;
 
 /**
  * Created by Zeyang Su on 10/24/2017.
+ * All code in this file is original.
  */
 
 import com.amazonaws.services.rekognition.model.Image;
