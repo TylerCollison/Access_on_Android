@@ -1,7 +1,8 @@
 package com.access.accessonandroid.FacialRecog;
 
 /**
- * Created by suzey on 10/21/2017.
+ * Created by Zeyang Su on 10/21/2017.
+ * Consulted Documentation for some functionalities but most of the code is original.
  */
 
 //

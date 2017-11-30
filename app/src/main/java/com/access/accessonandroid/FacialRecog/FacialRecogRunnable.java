@@ -4,7 +4,8 @@ import com.amazonaws.services.rekognition.model.Image;
 
 /**
  * You shouldn't have to understand what this class does
- * Created by suzey on 10/26/2017.
+ * Created by Zeyang Su on 10/26/2017.
+ * All code in this file is original.
  */
 
 public class FacialRecogRunnable implements Runnable {
