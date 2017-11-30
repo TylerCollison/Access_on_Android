@@ -10,6 +10,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.access.accessonandroid.MainActivity">
 
+    <!-- This layout defines instruction for facial recognition -->
+    <!-- Author: Mae Hutchison -->
+
+    <!-- Defines a frame divider -->
     <FrameLayout
         android:id="@+id/camera_preview"
         android:layout_width="fill_parent"
@@ -20,17 +24,18 @@
         android:layout_toRightOf="@+id/floatingActionButton"
         android:visibility="visible">
 
+        <!-- Displays instructions to the user -->
         <TextView
             android:id="@+id/textView"
             android:layout_width="216dp"
             android:layout_height="318dp"
-
             android:text="How to Use Authenticator
     Step 1. Point the front camera at your face and center your face in the screen.
     Step 2. Place your finger on the fingerprint scanner while keeping the camera pointed at your face.
     Step 3. Wait for emulation " />
     </FrameLayout>
-    <!--we don't need to keep this if we're doing auto-capture-->
+
+    <!-- Button used to capture an image -->
     <Button
         android:id="@+id/button_capture"
         android:layout_width="wrap_content"
@@ -50,7 +55,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
     <!--android:onClick="display"-->
-    <!--we don't need to keep this if we're doing auto-capture-->
 
 </RelativeLayout>
 

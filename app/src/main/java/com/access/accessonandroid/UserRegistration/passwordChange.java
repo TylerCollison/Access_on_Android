@@ -10,28 +10,46 @@ import android.widget.Toast;
 import com.access.accessonandroid.R;
 import com.access.accessonandroid.Data.EmployeeRecord;
 
+/**
+ * @author Megan Goins
+ *
+ * This activity is responsible for allowing the user to change his or her password.
+ */
 public class passwordChange extends AppCompatActivity {
-
-    private Button changePasswordButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setContentView(com.access.accessonandroid.R.layout.activity_password_change);
-        changePasswordButton = (Button) findViewById(R.id.changePasswordButton);
+        setContentView(com.access.accessonandroid.R.layout.activity_password_change);
+
+        //Store the Change Password button
+        Button changePasswordButton = (Button) findViewById(R.id.changePasswordButton);
+
+        //Change the user's password on Change Password button click
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {//On click of s
+            public void onClick(View v) {
+                //Store the password input fields
                 EditText passwordTextBox = (EditText) findViewById(R.id.newPassword);
                 EditText confirmTextBox = (EditText) findViewById(R.id.confirmNewpassword);
+
+                //Get the user-entered password information
                 String enteredPassword = passwordTextBox.getText().toString();
                 String confirmedPassword = confirmTextBox.getText().toString();
-                EmployeeRecord userRecord = Registration.getRecord();
+
+                //Get the employee record for the user
+                EmployeeRecord userRecord = EmployeeRecord.getInstance();
+
+                //Determine whether the supplied password matches the employee record
                 if (enteredPassword.equals(confirmedPassword)) {
+                    //Update the user's password
                     userRecord.updateUserPassword(confirmedPassword);
+                    //Display a success message
                     Toast.makeText(getApplicationContext(), "Password changed",Toast.LENGTH_SHORT).show();
+                    //Close this activity
                     finish();
                 }
                 else {
+                    //Display an error
                     Toast.makeText(getApplicationContext(), "Passwords do not match.",Toast.LENGTH_SHORT).show();
                 }
 

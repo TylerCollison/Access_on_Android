@@ -1,9 +1,14 @@
 package com.access.accessonandroid.NFC.HCE;
 
 /**
- * Created by Tyler Collison on 11/14/2017.
+ * @author Tyler Collison
+ *
+ * This enum specifies the commands that can be sent over NFC
  */
 
+/**
+ * Enumerates the commands that can be sent over NFC
+ */
 public enum HCECommand {
     Wait
 }

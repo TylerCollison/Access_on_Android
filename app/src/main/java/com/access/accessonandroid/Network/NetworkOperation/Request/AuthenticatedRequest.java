@@ -4,11 +4,13 @@ import com.access.accessonandroid.Network.NetworkOperation.INetworkOperation;
 import com.google.gson.Gson;
 
 /**
- * Created by Tyler Collison on 11/12/2017.
+ * @author Tyler Collison
+ *
+ * This class represents a JSON authentication request to be sent to the server for verification
  */
-
 public class AuthenticatedRequest implements INetworkOperation {
 
+    //Store the username and password
     public String username;
     public String password;
 

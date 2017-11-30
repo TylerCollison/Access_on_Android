@@ -12,43 +12,54 @@ import com.access.accessonandroid.UserRegistration.passwordChange;
 
 import android.content.Intent;
 
+/**
+ * @author Megan Goins
+ *
+ * This class is responsible for managing the initial sign-in screen, at which the user enters
+ * his or her username and password for later authentication with the server.
+ */
 public class Registration extends AppCompatActivity {
 
-    private Button signInButton;
-    private static EmployeeRecord userRecord;
-    private static String correctUsername = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-        signInButton = (Button) findViewById(R.id.signInButton);
+
+        //Store the Sign-in button
+        Button signInButton = (Button) findViewById(R.id.signInButton);
+
+        //Sign the user in on Sign-in button click
         signInButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){//On click of signInButton
+            public void onClick(View v){
+                //Get the user-entered username and password
                 EditText username = (EditText)findViewById(R.id.username);
                 EditText password = (EditText)findViewById(R.id.password);
                 String enteredUsername = username.getText().toString();
                 String enteredPassword = password.getText().toString();
-                userRecord = EmployeeRecord.getInstance();
+
+                //Get the employee record for the user
+                EmployeeRecord userRecord = EmployeeRecord.getInstance();
+
+                //Determine whether the supplied username matches the record
                 if(userRecord.isUser(enteredUsername)){
-                    correctUsername = enteredUsername;
+                    //Determine whether the supplied password matches the record
                     String storedPassword = userRecord.getUserPassword();
                     if(!storedPassword.equals(enteredPassword))
+                        //Display an error message
                         Toast.makeText(getApplicationContext(), "Wrong Credentials",Toast.LENGTH_SHORT).show();
                     else {
-                        userRecord.SetCredentials(correctUsername, enteredPassword);
+                        //Set the user's credentials in the employee record
+                        userRecord.SetCredentials(enteredUsername, enteredPassword);
+                        //Close this activity
                         finish();
                     }
                 }
                 else {
+                    //Display an error message
                     Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
-    }
-
-    public static EmployeeRecord getRecord(){
-        return userRecord;
     }
 }

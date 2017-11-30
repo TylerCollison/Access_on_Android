@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Access_on_Android.iml" filepath="$PROJECT_DIR$/Access_on_Android.iml" />
       <module fileurl="file://C:\Users\danie_000\AndroidStudioProjects\Access_on_Android2\Access_on_Android.iml" filepath="C:\Users\danie_000\AndroidStudioProjects\Access_on_Android2\Access_on_Android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Access_on_Android2.iml" filepath="$PROJECT_DIR$/Access_on_Android2.iml" />
+      <module fileurl="file://D:\AndroidStudio\AndroidStudioProjects\Access_on_Android\Access_on_Android2.iml" filepath="D:\AndroidStudio\AndroidStudioProjects\Access_on_Android\Access_on_Android2.iml" />
       <module fileurl="file://D:\AndroidStudio\AndroidStudioProjects\Access_on_Android\AccessonAndroid.iml" filepath="D:\AndroidStudio\AndroidStudioProjects\Access_on_Android\AccessonAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

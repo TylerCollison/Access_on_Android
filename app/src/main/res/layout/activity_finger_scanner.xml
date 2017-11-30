@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.access.accessonandroid.FingerScannerActivity">
 
+    <!-- This defines the layout of the finger scanning activity -->
+    <!-- Author: Tyler Collison -->
+
+    <!-- Texture view for the background of the activity -->
     <TextureView
         android:id="@+id/cameraPreviewView"
         android:layout_width="wrap_content"
@@ -13,6 +17,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
 
+    <!-- Image for the background of the activity -->
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
@@ -21,6 +26,7 @@
         android:layout_centerHorizontal="true"
         app:srcCompat="?android:attr/fingerprintAuthDrawable" />
 
+    <!-- Textview to display instructions to the user -->
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -30,6 +36,7 @@
         android:layout_marginBottom="151dp"
         android:text="Please place your finger on the scanner" />
 
+    <!-- The finger scanning progress bar -->
     <ProgressBar
         android:id="@+id/progressBar2"
         style="?android:attr/progressBarStyle"

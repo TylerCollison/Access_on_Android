@@ -5,11 +5,11 @@ import android.util.Log;
 import java.util.Arrays;
 
 /**
+ * @author Tyler Collison
+ *
  * The HCEAccessProtocolEngine class implements the HCEProtocolEngine interface and is responsible
  * for handling the specifics of the HCE Access Control protocol. In other words, it handles the
  * interface between an HCEAccessCard and the NFC communication client.
- *
- * Created by Tyler Collison on 10/24/2017.
  */
 public class HCEAccessProtocolEngine implements IHCEProtocolEngine {
 
@@ -17,17 +17,16 @@ public class HCEAccessProtocolEngine implements IHCEProtocolEngine {
     private IHCEAccessCard accessCard;
     // AID for access control
     private static final String ACCESS_CONTROL_AID = "F222222222";
-    // ISO-DEP command HEADER for selecting an AID.
-    // Format: [Class | Instruction | Parameter 1 | Parameter 2]
+    // HEADER for selecting an AID.
     private static final String SELECT_APDU_HEADER = "00A40400";
     // "OK" status word sent in response to SELECT AID command (0x9000)
-    private static final byte[] SELECT_OK_SW = HexStringToByteArray("9000");
-    // "UNKNOWN" status word sent in response to invalid APDU command (0x0000)
-    private static final byte[] UNKNOWN_CMD_SW = HexStringToByteArray("0000");
-    // "UNKNOWN" status word sent in response to invalid APDU command (0x0000)
-    private static final byte[] WAIT_CMD_SW = HexStringToByteArray("5000");
+    private static final byte[] SELECT_OK_SW = toByteArray("9000");
+    // "UNKNOWN" status word (0x0000)
+    private static final byte[] UNKNOWN_CMD_SW = toByteArray("0000");
+    // "WAIT" status word (0x5000)
+    private static final byte[] WAIT_CMD_SW = toByteArray("5000");
     // Create the APDU Select command by merging the select header and AID
-    private static final byte[] SELECT_APDU = BuildSelectApdu(ACCESS_CONTROL_AID);
+    private static final byte[] SELECT_APDU = createSelectAPDU(ACCESS_CONTROL_AID);
 
     public HCEAccessProtocolEngine(IHCEAccessCard card) {
         accessCard = card;
@@ -35,9 +34,12 @@ public class HCEAccessProtocolEngine implements IHCEProtocolEngine {
 
     @Override
     public byte[] getResponse(byte[] request) {
+        //Set the default response
         byte[] response = UNKNOWN_CMD_SW;
+        //Determine whether the request is the SELECT APDU
         if (isSelectAPDU(request)) {
             Log.v("NFC", "Received Select ADPU");
+            //Generate the SELECT APDU response
             response = createIDResponse();
         }
         return response;
@@ -47,6 +49,7 @@ public class HCEAccessProtocolEngine implements IHCEProtocolEngine {
     public byte[] getCommandCode(HCECommand command) {
         byte[] result = new byte[0];
 
+        //Choose the appropriate command code
         switch (command) {
             case Wait:
                 result = WAIT_CMD_SW;
@@ -70,59 +73,54 @@ public class HCEAccessProtocolEngine implements IHCEProtocolEngine {
      * @return Response as a byte array
      */
     private byte[] createIDResponse() {
-        return ConcatArrays(accessCard.GetAccessID().getBytes(), SELECT_OK_SW);
+        return mergeArrays(accessCard.GetAccessID().getBytes(), SELECT_OK_SW);
     }
 
     /**
-     * Build APDU for SELECT AID command. This command indicates which service a reader is
-     * interested in communicating with. See ISO 7816-4.
-     *
-     * @param aid Application ID (AID) to select
-     * @return APDU for SELECT AID command
+     * Build APDU for SELECT AID command for this application
+     * @param aid The application ID
+     * @return The APDU SELECT AID command
      */
-    private static byte[] BuildSelectApdu(String aid) {
-        // Format: [CLASS | INSTRUCTION | PARAMETER 1 | PARAMETER 2 | LENGTH | DATA]
-        return HexStringToByteArray(SELECT_APDU_HEADER + String.format("%02X",
+    private static byte[] createSelectAPDU(String aid) {
+        return toByteArray(SELECT_APDU_HEADER + String.format("%02X",
                 aid.length() / 2) + aid);
     }
 
     /**
-     * Utility method to convert a hexadecimal string to a byte string.
-     *
-     * <p>Behavior with input strings containing non-hexadecimal characters is undefined.
-     *
-     * @param s String containing hexadecimal characters to convert
-     * @return Byte array generated from input
-     * @throws java.lang.IllegalArgumentException if input length is incorrect
+     * Converts a hex string to a byte array.
+     * @param s The hex string to be converted
+     * @return The byte array representation of the hex string
      */
-    private static byte[] HexStringToByteArray(String s) throws IllegalArgumentException {
-        int len = s.length();
-        if (len % 2 == 1) {
-            throw new IllegalArgumentException("Hex string must have even number of characters");
-        }
-        byte[] data = new byte[len / 2]; // Allocate 1 byte per 2 hex characters
-        for (int i = 0; i < len; i += 2) {
-            // Convert each character into a integer (base-16), then bit-shift into place
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+    private static byte[] toByteArray(String s) {
+        //Get the length of the hex string
+        int length = s.length();
+        //Allocate the byte array
+        byte[] bytes = new byte[length / 2];
+        //Convert each character of the hex string into an integer
+        for (int i = 0; i < length; i += 2) {
+            bytes[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
                     + Character.digit(s.charAt(i+1), 16));
         }
-        return data;
+        return bytes;
     }
 
     /**
-     * Utility method to concatenate two byte arrays.
-     * @param first First array
-     * @param rest Any remaining arrays
-     * @return Concatenated copy of input arrays
+     * Concatenates the given byte arrays into a single array.
+     * @param base First array
+     * @param additional Additional arrays
+     * @return Merged copy of arrays
      */
-    public static byte[] ConcatArrays(byte[] first, byte[]... rest) {
-        int totalLength = first.length;
-        for (byte[] array : rest) {
-            totalLength += array.length;
+    private static byte[] mergeArrays(byte[] base, byte[]... additional) {
+        //Get the length of the base array
+        int arrayLength = base.length;
+        //Add the length of the remaining arrays
+        for (byte[] array : additional) {
+            arrayLength += array.length;
         }
-        byte[] result = Arrays.copyOf(first, totalLength);
-        int offset = first.length;
-        for (byte[] array : rest) {
+        //Create a new array and place the members of each array into it in order
+        byte[] result = Arrays.copyOf(base, arrayLength);
+        int offset = base.length;
+        for (byte[] array : additional) {
             System.arraycopy(array, 0, result, offset, array.length);
             offset += array.length;
         }

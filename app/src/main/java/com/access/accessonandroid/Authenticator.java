@@ -32,19 +32,31 @@ public class Authenticator {
         return instance;
     }
 
+    //Store whether the user has been authenticated
     private boolean isAuthenticated = false;
 
+    //Store the authentication flags
     private boolean requiresFingerprint = true;
     private boolean requiresFacialRecognition = true;
 
+    /**
+     * Determines whether the user has been sufficiently authenticated
+     * @return The user's authentication status
+     */
     public boolean getAuthenticated() {
         return isAuthenticated;
     }
 
+    /**
+     * Invalidates the user's authentication
+     */
     public void invalidateAuthentication() {
         isAuthenticated = false;
     }
 
+    /**
+     * Validates the user's authentication
+     */
     public void authenticate() {
         isAuthenticated = true;
     }
@@ -76,6 +88,7 @@ public class Authenticator {
         Thread fingerthread = new Thread(fingerRunner);
         fingerthread.start();
 
+        //Wait for the fingerprinting thread to finish
         try {
             fingerthread.join();
         }catch (InterruptedException e){
@@ -84,10 +97,12 @@ public class Authenticator {
 
         Log.v("Authenticator", "Fingerprint Auth Success");
 
+        //Determine whether facial recognition is required
         if (requiresFacialRecognition) {
             //Authenticate via facial recognition
             authenticateFace(context);
         } else {
+            //Validate the user immediately
             authenticate();
         }
     }

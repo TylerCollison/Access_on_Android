@@ -12,6 +12,10 @@
     tools:layout_editor_absoluteY="81dp"
     tools:layout_editor_absoluteX="0dp">
 
+    <!-- This defines the layout of the camera activity -->
+    <!-- Author: Nick Pouliquen -->
+
+    <!-- The view that the camera preview is displayed on -->
     <TextureView
         android:id="@+id/textureView"
         android:layout_width="wrap_content"
@@ -19,6 +23,7 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
+    <!-- The button used to capture an image -->
     <ImageButton
         android:id="@+id/cameraImageButton"
         android:layout_width="wrap_content"

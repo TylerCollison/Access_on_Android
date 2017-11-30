@@ -4,11 +4,13 @@ import com.access.accessonandroid.Network.NetworkOperation.INetworkOperation;
 import com.google.gson.Gson;
 
 /**
- * Created by Tyler Collison on 11/12/2017.
+ * @author Tyler Collison
+ *
+ * This class represents a JSON response from the server that contains an access token
  */
-
 public class GetIDResponse implements INetworkOperation {
 
+    //Store the access token
     public String id;
 
     @Override

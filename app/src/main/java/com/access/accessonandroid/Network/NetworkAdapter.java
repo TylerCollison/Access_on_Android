@@ -14,11 +14,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by Tyler Collison on 11/12/2017.
+ * @author Tyler Collison
+ *
+ * The concrete implementation of the network adapter used to make web requests with a specified
+ * server.
  */
-
 public class NetworkAdapter implements INetworkAdapter {
 
+    //Store the server address
     private String address;
 
     public NetworkAdapter(String serverAddress) {
@@ -28,6 +31,7 @@ public class NetworkAdapter implements INetworkAdapter {
     @Override
     public void postToServer(INetworkOperation request,
                              INetworkCallback responseCallback) {
+        //Execute the web request on a new thread
         new AsyncClient().execute(address, request, responseCallback);
     }
 

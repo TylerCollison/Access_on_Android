@@ -10,6 +10,12 @@ import com.access.accessonandroid.Data.EmployeeRecord;
 
 import java.io.IOException;
 
+/**
+ * @author Tyler Collison
+ *
+ * This activity is responsible for initiating authentication via fingerprint and
+ * managing the UI displayed during the fingerprinting phase of authentication.
+ */
 public class FingerScannerActivity extends AppCompatActivity {
 
     @Override

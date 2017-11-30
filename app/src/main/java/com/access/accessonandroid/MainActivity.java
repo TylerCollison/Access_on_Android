@@ -1,29 +1,24 @@
 package com.access.accessonandroid;
 
 import android.content.Context;
-import android.nfc.cardemulation.HostApduService;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.access.accessonandroid.Camera.CameraActivity;
-import com.access.accessonandroid.Camera.FrontFacingCameraScanner;
-import com.access.accessonandroid.Camera.ICamera;
-import com.access.accessonandroid.Camera.ImageCaptureCallback;
 import com.access.accessonandroid.Data.EmployeeRecord;
-import com.access.accessonandroid.FingerScan.FingerScanThread;
-import com.access.accessonandroid.FingerScan.FingerScanner;
-import com.access.accessonandroid.NFC.Services.AccessCardService;
 import com.access.accessonandroid.UserRegistration.Registration;
 import com.access.accessonandroid.UserRegistration.passwordChange;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
+/**
+ * @author Tyler Collison
+ * @author Megan Goins
+ * @author Mae Hutchison
+ *
+ * This class is responsible for managing the main activity screen, which appears at application
+ * launch and acts as the central activity that unifies the application.
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -39,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(mainContext, Registration.class));
         }
 
+        //Start fingerprint scanning authentication activity on Authentication button click
         Button authButton = findViewById(R.id.authButton);
         authButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Start the change password activity on Change Password button click
         Button chngPasswordButton = findViewById(R.id.passwordButton);
         chngPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
+        //Invalidate the user's credentials on hibernation
         Authenticator.getInstance().invalidateAuthentication();
     }
 }

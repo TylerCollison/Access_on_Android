@@ -4,11 +4,14 @@ import com.access.accessonandroid.Network.NetworkOperation.INetworkOperation;
 import com.google.gson.Gson;
 
 /**
- * Created by Tyler Collison on 11/15/2017.
+ * @author Tyler Collison
+ *
+ * This class represents a JSON response from the server that indicates whether the supplied
+ * username and password were valid.
  */
-
 public class ValidateUserResponse implements INetworkOperation {
 
+    //Store whether the username and password were valid
     public boolean username_is_valid;
     public boolean password_is_valid;
 
