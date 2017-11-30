@@ -50,13 +50,23 @@ import java.util.List;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
-public class CameraActivity extends AppCompatActivity {
+/**
+ * @author Nick Pouliquen
+ *
+ * This class is responsible for managing the camera activity screen, which appears after
+ * fingerprint verification. Images are captured, and passed to the facial recognition
+ * component for verification.
+ */
 
+public class CameraActivity extends AppCompatActivity {
+    
+    // Class variables
     private static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
     private static final int STATE_PREVIEW = 0;
     private static final int STATE_WAIT_LOCK = 1;
     private int mCaptureState = STATE_PREVIEW;
     private TextureView mTextureView;
+    // Setup for surface texture
     private TextureView.SurfaceTextureListener mSurfaceTextureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -81,6 +91,7 @@ public class CameraActivity extends AppCompatActivity {
 
     };
 
+    // Handles opening and closing resources when activity is opened or closed
     private CameraDevice mCameraDevice;
     private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
         @Override
@@ -110,6 +121,7 @@ public class CameraActivity extends AppCompatActivity {
     private Size mPreviewSize;
     private Size mImageSize;
     private ImageReader mImageReader;
+    // Listens for when an image has been captured
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener = new
             ImageReader.OnImageAvailableListener() {
                 @Override
@@ -117,6 +129,8 @@ public class CameraActivity extends AppCompatActivity {
                     mBackgroundHandler.post(new FacialCompare(reader.acquireLatestImage()));
                 }
             };
+    
+    // Once image is captured, the code here is called. It calls facial recognition component.
     private class FacialCompare implements Runnable {
 
         private final Image mImage;
@@ -128,12 +142,10 @@ public class CameraActivity extends AppCompatActivity {
         @Override
         public void run() {
             ByteBuffer byteBuffer = mImage.getPlanes()[0].getBuffer();
-
-            //TODO: Call Mike's facial recognition
             //Captured from device
-
+    
+            // Call facial recognition component with image captured in byteBuffer
             com.amazonaws.services.rekognition.model.Image imageFromDevice = FacialRegSu.makeImageFromByteBuffer(byteBuffer);
-            //com.amazonaws.services.rekognition.model.Image imageFromDevice = FacialRegSu.makeImageFromS3File("will_match.jpg", "infosecurity");
             com.amazonaws.services.rekognition.model.Image imageOnServer = FacialRegSu.makeImageFromS3File("my_face_sample.jpg", "infosecurity");
             FacialRecog recog = new FacialRegSu(getApplicationContext());
             boolean isMatch = false;
@@ -156,6 +168,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
     private CameraCaptureSession mPreviewCaptureSession;
+    // callback after capture. Changes autofocus lock value.
     private CameraCaptureSession.CaptureCallback mPreviewCaptureCallback = new
             CameraCaptureSession.CaptureCallback() {
                 private void process(CaptureResult captureResult) {
@@ -186,6 +199,7 @@ public class CameraActivity extends AppCompatActivity {
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
+    // Used to get correct camera preview size
     private static class CompareSizeByArea implements Comparator<Size> {
 
         @Override
@@ -195,6 +209,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    // Sets up buttons and listeners and texture view
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -243,6 +258,7 @@ public class CameraActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    // Allows camera preview to be fullscreen
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -408,6 +424,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    // Autofocus
     private void lockFocus() {
         mCaptureState = STATE_WAIT_LOCK;
         mCaptureRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_START);
