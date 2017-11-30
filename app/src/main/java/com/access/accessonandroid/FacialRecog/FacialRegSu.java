@@ -1,8 +1,10 @@
 package com.access.accessonandroid.FacialRecog;
 
 /**
- * Created by Zeyang Su on 10/21/2017.
+ * @author Zeyang Su
  * Consulted Documentation for some functionalities but most of the code is original.
+ *
+ * This class is responsible for performing facial recognition using the Amazon Rekognition service.
  */
 
 //
@@ -51,26 +53,19 @@ public class FacialRegSu implements FacialRecog{
     /**
      * Constructor
      * @param androidAppContext
-//     * @param awsCredential
      */
-    public FacialRegSu(Context androidAppContext) {                                         // , CognitoCachingCredentialsProvider awsCredential
+    public FacialRegSu(Context androidAppContext) {   //CognitoCachingCredentialsProvider awsCredential
         this.newThread = null;
 
         this.SIMILARITY_THRESHOLD = 70F;
-        this.applicationContext = androidAppContext;                                        //        this.generalAwsCredential = awsCredential;
+        this.applicationContext = androidAppContext; //this.generalAwsCredential = awsCredential;
 
-        this.generalAwsCredential = new CognitoCachingCredentialsProvider(      // @TODO Should move this out eventually
+        this.generalAwsCredential = new CognitoCachingCredentialsProvider(
                 this.applicationContext,
                 "us-east-1:06e29e47-16cb-4d97-a6cc-cc9f5d774691", // Identity pool ID
                 Regions.US_EAST_1 // Region
         );
-
-//        if (AWSCognitoCredentialProvider.getInstance().GetProvider() == null) {     // If the Amazon AWS credential has not been initialized
-//            AWSCognitoCredentialProvider.getInstance().CreateProvider(androidAppContext);           // initialize Amazon AWS credential
-//        }
-//        this.generalAwsCredential = (CognitoCachingCredentialsProvider) AWSCognitoCredentialProvider.getInstance().GetProvider();   // store the Amazon AWS credential
-
-        }
+    }
 
 
     /**
@@ -115,7 +110,6 @@ public class FacialRegSu implements FacialRecog{
 
         /* Detect how many faces are in the given picture */
         int numOfFacesDetected = detectFaces(target);
-//        System.out.println("Number of faces detected: " + numOfFacesDetected);
         if (numOfFacesDetected != 1) {      // if the target image has 0 or more than 1 faces in it
             return isMatched;               // return no match
         }

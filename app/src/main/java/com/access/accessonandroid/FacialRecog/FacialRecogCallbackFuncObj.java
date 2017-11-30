@@ -1,8 +1,8 @@
 package com.access.accessonandroid.FacialRecog;
 
 /**
+ * @author Zeyang Su
  * This is the class you can use to "store" the callback function
- * Created by Zeyang Su on 10/27/2017.
  */
 
 public abstract class FacialRecogCallbackFuncObj {

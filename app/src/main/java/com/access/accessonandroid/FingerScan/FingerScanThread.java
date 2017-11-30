@@ -1,7 +1,8 @@
 package com.access.accessonandroid.FingerScan;
 
 /**
- * Created by Daniel Bond on 10/26/2017.
+ * @author Daniel Bond
+ *
  * This is a runnable which will run until the fingerscanner finds a match
  * There is a five second wait between scans to avoid issues with phone hardware
  * Works with FingerScanner and FingerScanHandler

@@ -1,8 +1,10 @@
 package com.access.accessonandroid.FacialRecog;
 
 /**
- * Created by Zeyang Su on 10/24/2017.
+ * @author Zeyang Su
+ *
  * All code in this file is original.
+ * This defines an interface for the facial recognition component.
  */
 
 import com.amazonaws.services.rekognition.model.Image;

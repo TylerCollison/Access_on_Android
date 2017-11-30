@@ -3,9 +3,10 @@ package com.access.accessonandroid.FacialRecog;
 import com.amazonaws.services.rekognition.model.Image;
 
 /**
- * You shouldn't have to understand what this class does
- * Created by Zeyang Su on 10/26/2017.
+ * @author Zeyang Su
  * All code in this file is original.
+ *
+ * Runnable used for network operations on the facial recognition component.
  */
 
 public class FacialRecogRunnable implements Runnable {
@@ -14,9 +15,8 @@ public class FacialRecogRunnable implements Runnable {
 
     private Image sourceImage;
     private Image targetImage;
-//    private android.content.Context appContext;
 
-    FacialRecogRunnable(FacialRecog currObject, Image imageOnFile, Image target, boolean[] resultQuickFix)         //android.content.Context androidAppContext,
+    FacialRecogRunnable(FacialRecog currObject, Image imageOnFile, Image target, boolean[] resultQuickFix)
     {
         this.result = resultQuickFix;
         this.sourceImage = imageOnFile;

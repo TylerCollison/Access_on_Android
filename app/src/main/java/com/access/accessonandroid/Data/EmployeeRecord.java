@@ -14,13 +14,15 @@ import com.access.accessonandroid.Network.NetworkOperation.Response.GetIDRespons
 import java.io.IOException;
 
 /**
+ * @author Tyler Collison
+ * @author Megan Goins
+ *
  * The EmployeeRecord class is responsible for handling the local representation of the user's
  * Employee Record, which contains relevant information about the user.
- *
- * Created by Tyler Collison on 10/24/2017.
  */
 public class EmployeeRecord implements IHCEAccessCard, UserAccess{
 
+    //Store the username and password
     private String _username;
     private String _password;
 
@@ -49,30 +51,44 @@ public class EmployeeRecord implements IHCEAccessCard, UserAccess{
         _password = password;
     }
 
+    /**
+     * Determines whether the record credentials have been set
+     * @return Whether the credentials have been set
+     */
     public boolean HasCredentials() {
         return _username != null && _password != null;
     }
 
+    /**
+     * Refreshes the access token from the server using the stored credentials
+     * @param serverAddress The address of the application server
+     * @throws IOException
+     */
     public void RefreshAccessIDFromServer(String serverAddress) throws IOException {
+        //Create a new authentication request
         INetworkOperation getIdRequest = new AuthenticatedRequest(_username, _password);
+        //Create a new network adapter
         INetworkAdapter adapter = new NetworkAdapter(serverAddress);
+        //Send web request for the access token
         adapter.postToServer(getIdRequest, new AbstractNetworkCallback<GetIDResponse>(new GetIDResponse()) {
             @Override
             protected void handleResponse(GetIDResponse response) {
+                //Set the access token
                 id = response.id;
                 Log.v("EmployeeRecord", "EmployeeID: " + id);
             }
         });
     }
 
+    @Override
     public Boolean isUser(String username){
         return true;
     }
 
-    public void updateUserPassword(String password){
+    @Override
+    public void updateUserPassword(String password){ }
 
-    }
-
+    @Override
     public String getUserPassword(){
         return "password1234";
     }

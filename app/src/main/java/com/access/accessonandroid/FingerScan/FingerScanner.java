@@ -19,7 +19,8 @@ import javax.crypto.SecretKey;
 import static android.content.Context.KEYGUARD_SERVICE;
 
 /**
- * Created by Daniel Bond on 10/24/2017.
+ * @author Daniel Bond
+ *
  * Adapted code from an online tutorial
  *      http://www.techotopia.com/index.php/An_Android_Fingerprint_Authentication_Tutorial
  *

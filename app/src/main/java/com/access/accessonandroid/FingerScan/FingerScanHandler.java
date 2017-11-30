@@ -9,7 +9,8 @@ import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 /**
- * Created by Daniel Bond on 10/24/2017.
+ * @author Daniel Bond
+ *
  * Adapted code from an online tutorial
  *      http://www.techotopia.com/index.php/An_Android_Fingerprint_Authentication_Tutorial
  * This is the code that catches result of each call to FingerScanner.scanFinger()
